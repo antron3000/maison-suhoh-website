@@ -1,28 +1,22 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import LoadingScreen from "@/components/loading-screen"
 import TopBar from "@/components/top-bar"
+import { useLanguage } from "@/lib/LanguageContext"
+import { translations } from "@/lib/i18n"
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [scrolled, setScrolled] = useState(false)
+  const { language } = useLanguage()
+  const t = translations[language].home
 
-  const slides = [
-    {
-      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80",
-      title: "EXPLORE FW24 COLLECTION,",
-      subtitle: "EXPLORE THE ARCHIVE, MAISON STUDIO",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80",
-      title: "URBAN MINIMALISM,",
-      subtitle: "CONTEMPORARY DESIGN, STUDIO",
-    },
+  const slideImages = [
+    "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80",
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80",
   ]
 
   const galleryImages = [
@@ -38,9 +32,7 @@ export default function Home() {
   ]
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 100)
-    }
+    const handleScroll = () => {}
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -56,12 +48,12 @@ export default function Home() {
         <section className="min-h-screen bg-background flex items-center justify-center py-32 px-8">
           <div className="w-full max-w-7xl">
             <div className="flex items-center justify-between mb-16">
-              <h2 className="text-xs tracking-[0.15em]">RUE STUDIO</h2>
-              <h2 className="text-xs tracking-[0.15em]">(ARCHIVE)</h2>
+              <h2 className="text-xs tracking-[0.15em]">{t.rueStudio}</h2>
+              <h2 className="text-xs tracking-[0.15em]">{t.archive}</h2>
               <div className="flex gap-6 text-xs tracking-[0.15em]">
-                <Link href="/work" className="hover:opacity-60 transition-opacity">WORK</Link>
-                <Link href="/services" className="hover:opacity-60 transition-opacity">SERVICES</Link>
-                <Link href="/about" className="hover:opacity-60 transition-opacity">ABOUT</Link>
+                <Link href="/work" className="hover:opacity-60 transition-opacity">{t.work}</Link>
+                <Link href="/services" className="hover:opacity-60 transition-opacity">{t.services}</Link>
+                <Link href="/about" className="hover:opacity-60 transition-opacity">{t.about}</Link>
               </div>
             </div>
 
@@ -86,15 +78,15 @@ export default function Home() {
 
             <div className="flex items-end justify-between mt-16">
               <div className="text-xs tracking-[0.15em]">
-                <p>RUE STUDIO</p>
+                <p>{t.rueStudio}</p>
               </div>
               <div className="text-xs tracking-[0.15em]">
-                <p>(ARCHIVE)</p>
+                <p>{t.archive}</p>
               </div>
               <div className="text-xs tracking-[0.15em] text-right">
-                <p>EXPLORE FW24</p>
-                <p>COLLECTION, EXPLORE THE</p>
-                <p>ARCHIVE, MAISON STUDIO</p>
+                <p>{t.exploreFW24}</p>
+                <p>{t.collectionExplore}</p>
+                <p>{t.archiveStudio}</p>
               </div>
             </div>
           </div>
@@ -102,21 +94,21 @@ export default function Home() {
 
         <section className="min-h-screen bg-background flex items-center justify-center relative">
           <div className="absolute top-8 left-8 text-xs tracking-[0.15em] max-w-xs">
-            <p className="mb-2">{slides[currentSlide].title}</p>
-            <p className="mb-2">{slides[currentSlide].subtitle}</p>
+            <p className="mb-2">{t.slides[currentSlide].title}</p>
+            <p className="mb-2">{t.slides[currentSlide].subtitle}</p>
           </div>
 
           <div className="absolute top-8 right-8 text-xs tracking-[0.15em] text-right">
-            <Link href="/work" className="hover:opacity-60 transition-opacity">WORK</Link>
+            <Link href="/work" className="hover:opacity-60 transition-opacity">{t.work}</Link>
             <br />
-            <Link href="/services" className="hover:opacity-60 transition-opacity">SERVICES</Link>
+            <Link href="/services" className="hover:opacity-60 transition-opacity">{t.services}</Link>
             <br />
-            <Link href="/about" className="hover:opacity-60 transition-opacity">ABOUT</Link>
+            <Link href="/about" className="hover:opacity-60 transition-opacity">{t.about}</Link>
           </div>
 
           <div className="relative w-full max-w-2xl aspect-[4/5]">
             <Image
-              src={slides[currentSlide].image}
+              src={slideImages[currentSlide]}
               alt="Collection"
               fill
               className="object-cover"
@@ -125,35 +117,34 @@ export default function Home() {
           </div>
 
           <button
-            onClick={() => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))}
+            onClick={() => setCurrentSlide((prev) => (prev === 0 ? slideImages.length - 1 : prev - 1))}
             className="absolute left-8 top-1/2 -translate-y-1/2 text-xs tracking-[0.15em] hover:opacity-60 transition-opacity"
           >
-            BACK
+            {t.back}
           </button>
 
           <button
-            onClick={() => setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1))}
+            onClick={() => setCurrentSlide((prev) => (prev === slideImages.length - 1 ? 0 : prev + 1))}
             className="absolute right-8 top-1/2 -translate-y-1/2 text-xs tracking-[0.15em] hover:opacity-60 transition-opacity"
           >
-            NEXT
+            {t.next}
           </button>
 
           <div className="absolute bottom-8 left-8 text-xs tracking-[0.15em]">
-            <p>RUE STUDIO IS A CREATIVE PRACTICE BASED PRACTICE</p>
-            <p>DIGITAL AND PHYSICAL REFLECTIONS FOR FELLOW</p>
-            <p>CREATIVES, ARCHITECTS, CULTURAL</p>
-            <p>INSTITUTIONS AND BRANDS</p>
+            {t.description.split("\n").map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
           </div>
 
           <div className="absolute bottom-8 right-8 text-xs tracking-[0.15em] text-right">
-            <p>EXPLORE IDEA</p>
-            <p>COLLECTION, EXPLORE THE</p>
-            <p>ARCHIVE, @2023 STUDIO</p>
+            <p>{t.exploreIdea}</p>
+            <p>{t.exploreCollection}</p>
+            <p>{t.archiveStudio}</p>
           </div>
         </section>
 
         <div className="fixed bottom-8 left-8 text-xs tracking-[0.15em] text-foreground/60">
-          ©2026 MAISON SUKOH
+          {t.copyright}
         </div>
       </main>
     </>

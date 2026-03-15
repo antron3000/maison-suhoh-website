@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useLanguage } from "@/lib/LanguageContext"
+import { translations } from "@/lib/i18n"
 
 export default function TopBar() {
   const [time, setTime] = useState("")
-  const [language, setLanguage] = useState("EN")
+  const { language, setLanguage } = useLanguage()
+  const t = translations[language].nav
 
   useEffect(() => {
     const updateTime = () => {
@@ -42,16 +45,16 @@ export default function TopBar() {
         <div className="flex flex-col gap-8">
           <nav className="flex flex-col gap-4">
             <Link href="/" className="text-sm hover:opacity-60 transition-opacity text-foreground/60">
-              Home
+              {t.home}
             </Link>
             <Link href="/work" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              Projects
+              {t.projects}
             </Link>
             <Link href="/work" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              Gallery
+              {t.gallery}
             </Link>
             <Link href="/about" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              Studio
+              {t.studio}
             </Link>
           </nav>
 
