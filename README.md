@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Maison - Fashion Production Company Website
 
-## Getting Started
+A stunning, modern fashion production company website built with Next.js, TypeScript, TailwindCSS, and Framer Motion.
 
-First, run the development server:
+## ✨ Features
 
+- **Modern Tech Stack**: Next.js 16, TypeScript, TailwindCSS 4, Framer Motion
+- **Aesthetic Design**: Minimalist, high-fashion aesthetic with smooth animations
+- **Fully Responsive**: Mobile-first design that looks great on all devices
+- **Smooth Animations**: Page transitions and scroll animations using Framer Motion
+- **SEO Optimized**: Proper meta tags and semantic HTML structure
+- **Performance**: Optimized images and lazy loading for fast page loads
+
+## 🎨 Pages
+
+- **Home**: Hero section with full-screen background, featured work showcase
+- **Work**: Portfolio gallery with category filtering
+- **Services**: Comprehensive services overview with icons
+- **About**: Company story, values, and recognition
+- **Contact**: Contact form with company information
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ installed
+- npm, yarn, or pnpm package manager
+
+### Installation
+
+1. Navigate to the project directory:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd fashion-website
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS 4
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Fonts**: Geist Sans & Geist Mono
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+fashion-website/
+├── app/                    # Next.js app directory
+│   ├── page.tsx           # Homepage
+│   ├── work/              # Portfolio page
+│   ├── services/          # Services page
+│   ├── about/             # About page
+│   ├── contact/           # Contact page
+│   ├── layout.tsx         # Root layout
+│   └── globals.css        # Global styles
+├── components/            # Reusable components
+│   ├── navbar.tsx         # Navigation bar
+│   ├── footer.tsx         # Footer
+│   └── project-card.tsx   # Project card component
+├── lib/                   # Utility functions
+│   └── utils.ts           # Helper functions
+└── public/                # Static assets
+```
 
-## Deploy on Vercel
+## 🎯 Customization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Colors
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Edit the CSS variables in `app/globals.css` to customize the color scheme:
+
+```css
+:root {
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --accent: #1a1a1a;
+  --muted: #f5f5f5;
+  --border: #e5e5e5;
+}
+```
+
+### Content
+
+- Update project data in `app/page.tsx` and `app/work/page.tsx`
+- Modify service offerings in `app/services/page.tsx`
+- Customize company information in `app/about/page.tsx`
+- Update contact details in `app/contact/page.tsx`
+
+### Images
+
+Replace placeholder images with your own:
+- Hero images: Update URLs in page components
+- Project images: Add to `/public` folder or use external URLs
+
+## 📦 Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## 🚢 Deployment
+
+Deploy easily to Vercel:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+
+Or deploy to other platforms:
+- Netlify
+- AWS Amplify
+- Digital Ocean
+- Railway
+
+## 📝 License
+
+This project is open source and available under the MIT License.
