@@ -47,9 +47,6 @@ export default function TopBar() {
             <Link href="/work" className="text-sm hover:opacity-60 transition-opacity font-medium">
               Projects
             </Link>
-            <Link href="/services" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              News
-            </Link>
             <Link href="/work" className="text-sm hover:opacity-60 transition-opacity font-medium">
               Gallery
             </Link>
