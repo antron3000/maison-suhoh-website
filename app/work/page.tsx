@@ -1,219 +1,104 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import { PageTransition } from "@/components/PageTransition"
 import TopBar from "@/components/top-bar"
 
-type ViewMode = "grid" | "list" | "masonry"
+const PROJECTS = [
+  {
+    id: "001",
+    slug: "noir-campaign",
+    title: "Noir Campaign",
+    year: "2026",
+    image: "/images/photo-01.jpg",
+  },
+  {
+    id: "002",
+    slug: "lumiere-launch",
+    title: "Lumière Launch",
+    year: "2025",
+    image: "/images/lumiere-01.jpg",
+  },
+  {
+    id: "003",
+    slug: "sequoia-dinner",
+    title: "Séquoia Dinner",
+    year: "2025",
+    image: "/images/photo-03.jpg",
+  },
+  {
+    id: "004",
+    slug: "brand-story-cle",
+    title: "Brand Story — Clé",
+    year: "2024",
+    image: "/images/brand-01.jpg",
+  },
+  {
+    id: "005",
+    slug: "rooftop-activation",
+    title: "Rooftop Activation",
+    year: "2024",
+    image: "/images/photo-02.jpg",
+  },
+]
 
 export default function WorkPage() {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid")
-  const [filter, setFilter] = useState("ALL")
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
-
-  const categories = ["ALL", "EDITORIAL", "CAMPAIGN", "LOOKBOOK", "FILM"]
-
-  const projects = [
-    {
-      id: 1,
-      title: "Ethereal Collection",
-      category: "EDITORIAL",
-      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80",
-      year: "2024",
-    },
-    {
-      id: 2,
-      title: "Urban Minimalism",
-      category: "CAMPAIGN",
-      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80",
-      year: "2024",
-    },
-    {
-      id: 3,
-      title: "Avant-Garde",
-      category: "LOOKBOOK",
-      image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
-      year: "2023",
-    },
-    {
-      id: 4,
-      title: "Noir Series",
-      category: "EDITORIAL",
-      image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80",
-      year: "2023",
-    },
-    {
-      id: 5,
-      title: "Summer Campaign",
-      category: "CAMPAIGN",
-      image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80",
-      year: "2024",
-    },
-    {
-      id: 6,
-      title: "Motion Pictures",
-      category: "FILM",
-      image: "https://images.unsplash.com/photo-1558769132-cb1aea1c8a7c?w=800&q=80",
-      year: "2023",
-    },
-  ]
-
-  const filteredProjects = filter === "ALL" 
-    ? projects 
-    : projects.filter(p => p.category === filter)
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
 
   return (
     <>
       <TopBar />
-      <main className="pt-24 pb-32 px-8 pl-56">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-start justify-between mb-12">
-            <div className="text-xs tracking-[0.15em]">
-              <p className="mb-2">{filteredProjects.length} ITEMS</p>
-              <div className="flex gap-4 mt-4">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setFilter(cat)}
-                    className={`${
-                      filter === cat ? "opacity-100" : "opacity-40"
-                    } hover:opacity-100 transition-opacity`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
+      <PageTransition className="px-4 md:px-8 py-16 min-h-screen relative flex flex-col justify-center">
+        {/* Fixed image reveal on hover — left side, desktop only */}
+        <div className="fixed top-1/2 -translate-y-1/2 left-16 w-[400px] aspect-[3/4] pointer-events-none hidden md:block z-0">
+          {PROJECTS.map((project) => (
+            <div
+              key={project.id}
+              className={`absolute inset-0 w-full h-full transition-all duration-700 ease-out ${
+                hoveredProject === project.id
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-95"
+              }`}
+            >
+              <Image
+                src={project.image}
+                alt=""
+                fill
+                className="object-cover shadow-2xl shadow-black/10 rounded-sm grayscale"
+              />
             </div>
-
-            <div className="flex gap-4 text-xs tracking-[0.15em]">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={viewMode === "grid" ? "opacity-100" : "opacity-40 hover:opacity-100"}
-              >
-                GRID
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={viewMode === "list" ? "opacity-100" : "opacity-40 hover:opacity-100"}
-              >
-                LIST
-              </button>
-              <button
-                onClick={() => setViewMode("masonry")}
-                className={viewMode === "masonry" ? "opacity-100" : "opacity-40 hover:opacity-100"}
-              >
-                MASONRY
-              </button>
-            </div>
-          </div>
-
-          {viewMode === "grid" && (
-            <div className="grid grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <Link
-                  key={project.id}
-                  href={`/work/${project.id}`}
-                  className="group relative"
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  <div className="relative aspect-[3/4] bg-muted overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {hoveredProject === project.id && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="absolute inset-0 bg-black/60 flex items-center justify-center text-white"
-                      >
-                        <div className="text-center">
-                          <p className="text-2xl font-light mb-2">{String(project.id).padStart(3, '0')}</p>
-                          <p className="text-xs tracking-[0.15em]">{project.title}</p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {viewMode === "list" && (
-            <div className="space-y-8">
-              {filteredProjects.map((project) => (
-                <Link
-                  key={project.id}
-                  href={`/work/${project.id}`}
-                  className="group grid grid-cols-12 gap-8 items-center"
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  <div className="col-span-1 text-xs tracking-[0.15em] text-foreground/40">
-                    {String(project.id).padStart(3, '0')}
-                  </div>
-                  <div className="col-span-6 relative aspect-[16/9] bg-muted overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="col-span-5">
-                    <h3 className="text-xl font-light mb-2">{project.title}</h3>
-                    <p className="text-xs tracking-[0.15em] text-foreground/60">{project.category} · {project.year}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {viewMode === "masonry" && (
-            <div className="columns-3 gap-6">
-              {filteredProjects.map((project) => (
-                <Link
-                  key={project.id}
-                  href={`/work/${project.id}`}
-                  className="group relative block mb-6 break-inside-avoid"
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  <div className="relative aspect-[3/4] bg-muted overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {hoveredProject === project.id && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="absolute inset-0 bg-black/60 flex items-center justify-center text-white"
-                      >
-                        <div className="text-center">
-                          <p className="text-2xl font-light mb-2">{String(project.id).padStart(3, '0')}</p>
-                          <p className="text-xs tracking-[0.15em]">{project.title}</p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+          ))}
         </div>
 
-        <div className="fixed bottom-8 left-8 text-xs tracking-[0.15em] text-foreground/60">
-          ©2026 MAISON SUKOH
+        {/* Project list — aligned to right */}
+        <div className="max-w-2xl relative z-10 w-full ml-auto md:mr-16">
+          <div className="border-t border-foreground/10" />
+          {PROJECTS.map((project) => (
+            <Link href={`/work/${project.slug}`} key={project.id}>
+              <motion.div
+                className="group flex flex-col sm:flex-row sm:items-center justify-between py-6 md:py-8 border-b border-foreground/10 cursor-pointer"
+                onMouseEnter={() => setHoveredProject(project.id)}
+                onMouseLeave={() => setHoveredProject(null)}
+              >
+                <div className="flex items-start sm:items-center gap-4 sm:gap-12">
+                  <span className="text-xs font-sans text-foreground/40 tracking-widest mt-2 sm:mt-0 transition-colors group-hover:text-foreground">
+                    {project.id}
+                  </span>
+                  <h2 className="text-sm md:text-base lg:text-lg font-serif font-extrabold tracking-tight transition-transform duration-500 ease-out group-hover:translate-x-4">
+                    {project.title}
+                  </h2>
+                </div>
+                <div className="mt-4 sm:mt-0 pl-[3.25rem] sm:pl-0 text-xs font-sans tracking-widest text-foreground/40 group-hover:text-foreground transition-colors">
+                  {project.year}
+                </div>
+              </motion.div>
+            </Link>
+          ))}
         </div>
-      </main>
+      </PageTransition>
     </>
   )
 }

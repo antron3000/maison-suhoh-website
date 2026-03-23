@@ -2,78 +2,133 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/lib/LanguageContext"
 import { translations } from "@/lib/i18n"
 
 export default function TopBar() {
   const [time, setTime] = useState("")
+  const [open, setOpen] = useState(false)
   const { language, setLanguage } = useLanguage()
   const t = translations[language].nav
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
-      const hours = now.getHours().toString().padStart(2, "0")
-      const minutes = now.getMinutes().toString().padStart(2, "0")
-      setTime(`${hours}:${minutes}`)
+      setTime(`${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`)
     }
-
     updateTime()
     const interval = setInterval(updateTime, 60000)
     return () => clearInterval(interval)
   }, [])
 
+  const links = [
+    { label: t.home,     href: "/" },
+    { label: "ABOUT",    href: "/about" },
+    { label: t.projects, href: "/work" },
+    { label: t.gallery,  href: "/gallery" },
+    { label: "CONTACT",  href: "/contact" },
+    { label: "SERVICES", href: "/services" },
+  ]
+
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-40 bg-background border-b border-border">
-        <div className="flex items-center justify-between px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-2 text-xs tracking-[0.15em]">
-            <span>TORONTO, ON</span>
-            <span className="text-foreground/40">|</span>
-            <span>{time}</span>
-          </div>
-
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.2em] font-light">
+      {/* Top bar — minimal */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background">
+        <div className="flex items-center justify-between px-6 py-4">
+          {/* Left — MAISON SUKOH */}
+          <Link
+            href="/"
+            className="text-2xl tracking-[-0.04em]"
+            onClick={() => setOpen(false)}
+          >
             MAISON SUKOH
           </Link>
 
-          <div></div>
-        </div>
-      </div>
-
-      <aside className="fixed left-0 top-16 h-screen w-48 bg-background border-r border-border z-30 p-8">
-        <div className="flex flex-col gap-8">
-          <nav className="flex flex-col gap-4">
-            <Link href="/" className="text-sm hover:opacity-60 transition-opacity text-foreground/60">
-              {t.home}
-            </Link>
-            <Link href="/work" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              {t.projects}
-            </Link>
-            <Link href="/work" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              {t.gallery}
-            </Link>
-            <Link href="/about" className="text-sm hover:opacity-60 transition-opacity font-medium">
-              {t.studio}
-            </Link>
-          </nav>
-
-          <div className="flex flex-col gap-2 pt-4 border-t border-border">
+          {/* Right — location + time + hamburger */}
+          <div className="flex items-center gap-4">
+            <div className="text-[10px] tracking-[0.1em] text-foreground/50 flex gap-2">
+              <span>TORONTO</span>
+              <span className="text-foreground/30">|</span>
+              <span>{time}</span>
+            </div>
             <button
-              onClick={() => setLanguage("EN")}
-              className={`text-sm text-left ${language === "EN" ? "font-medium" : "text-foreground/60"}`}
+              onClick={() => setOpen((o) => !o)}
+              className="flex flex-col gap-[5px] p-1 z-10"
+              aria-label="Menu"
             >
-              EN
-            </button>
-            <button
-              onClick={() => setLanguage("FR")}
-              className={`text-sm text-left ${language === "FR" ? "font-medium" : "text-foreground/60"}`}
-            >
-              FR
+              <motion.span
+                className="block w-5 h-[1.5px] bg-foreground origin-center"
+                animate={open ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.25 }}
+              />
+              <motion.span
+                className="block w-5 h-[1.5px] bg-foreground"
+                animate={open ? { opacity: 0 } : { opacity: 1 }}
+                transition={{ duration: 0.15 }}
+              />
+              <motion.span
+                className="block w-5 h-[1.5px] bg-foreground origin-center"
+                animate={open ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.25 }}
+              />
             </button>
           </div>
         </div>
-      </aside>
+
+      </div>
+
+      {/* Dropdown menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-background flex flex-col justify-between px-8 pt-24 pb-12"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+          >
+            {/* Nav links */}
+            <nav className="flex flex-col gap-8 mt-8">
+              {links.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.07, duration: 0.3 }}
+                >
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="text-2xl md:text-3xl tracking-tight hover:opacity-50 transition-opacity block"
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+
+            {/* Bottom — language + copyright */}
+            <div className="flex items-end justify-between">
+              <div className="flex gap-4 text-xs tracking-[0.1em]">
+                <button
+                  onClick={() => setLanguage("EN")}
+                  className={language === "EN" ? "opacity-100" : "opacity-40 hover:opacity-70"}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLanguage("FR")}
+                  className={language === "FR" ? "opacity-100" : "opacity-40 hover:opacity-70"}
+                >
+                  FR
+                </button>
+              </div>
+              <p className="text-[10px] tracking-[0.1em] text-foreground/40">©2026 MAISON SUKOH</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

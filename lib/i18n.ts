@@ -3,10 +3,10 @@ export type Language = "EN" | "FR"
 export const translations = {
   EN: {
     nav: {
-      home: "Home",
-      projects: "Projects",
-      gallery: "Gallery",
-      studio: "Studio",
+      home: "HOME",
+      projects: "PROJECTS",
+      gallery: "GALLERY",
+      studio: "STUDIO",
     },
     home: {
       rueStudio: "RUE STUDIO",
@@ -108,10 +108,10 @@ export const translations = {
   },
   FR: {
     nav: {
-      home: "Accueil",
-      projects: "Projets",
-      gallery: "Galerie",
-      studio: "Studio",
+      home: "ACCUEIL",
+      projects: "PROJETS",
+      gallery: "GALERIE",
+      studio: "STUDIO",
     },
     home: {
       rueStudio: "RUE STUDIO",

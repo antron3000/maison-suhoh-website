@@ -1,73 +1,117 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import TopBar from "@/components/top-bar"
 
 export default function ContactPage() {
+  const [time, setTime] = useState("")
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date()
+      setTime(
+        now.toLocaleTimeString("en-CA", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZone: "America/Toronto",
+          hour12: false,
+        }) + " (EST)"
+      )
+    }
+    update()
+    const interval = setInterval(update, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const rows = [
+    {
+      label: "Address",
+      value: (
+        <span>
+          Toronto, Ontario<br />
+          Canada
+        </span>
+      ),
+    },
+    { label: "Current Time", value: time },
+    {
+      label: "General Enquiries",
+      value: (
+        <a href="mailto:hello@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
+          hello@maisonsukoh.com
+        </a>
+      ),
+    },
+    {
+      label: "New Business",
+      value: (
+        <a href="mailto:tessia.yasmine@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
+          tessia.yasmine@maisonsukoh.com
+        </a>
+      ),
+    },
+    {
+      label: "Creative Direction",
+      value: (
+        <a href="mailto:tessia.yasmine@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
+          tessia.yasmine@maisonsukoh.com
+        </a>
+      ),
+    },
+    {
+      label: "Founder",
+      value: (
+        <a href="mailto:mama.soukoh@gmail.com" className="hover:opacity-60 transition-opacity">
+          mama.soukoh@gmail.com
+        </a>
+      ),
+    },
+    {
+      label: "Social Media",
+      value: (
+        <span className="flex flex-col gap-1">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-60 transition-opacity"
+          >
+            Instagram
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-60 transition-opacity"
+          >
+            LinkedIn
+          </a>
+        </span>
+      ),
+    },
+  ]
+
   return (
-    <main className="pt-32 pb-32 px-6 lg:px-12">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="space-y-16"
-        >
-          <div>
-            <h1 className="text-sm tracking-[0.2em] mb-12">EMAIL</h1>
-            <div className="space-y-8">
-              <a 
-                href="mailto:hello@maison.com"
-                className="block text-2xl md:text-3xl font-light tracking-wide hover:opacity-60 transition-opacity"
-              >
-                hello@maison.com
-              </a>
+    <>
+      <TopBar />
+      <main className="min-h-screen bg-background flex items-center justify-center px-8">
+        <div className="w-full max-w-2xl grid grid-cols-[1fr_auto_1fr] gap-x-1.5">
+          {rows.map((row, i) => (
+            <div key={i} className="contents">
+              <div className="py-2 flex justify-end">
+                <p className="text-[9px] tracking-[0.12em] text-foreground/40 whitespace-nowrap self-baseline">{row.label}</p>
+              </div>
+              <div className="py-2" />
+              <div className="py-2 flex justify-start">
+                <span className="text-[10px] tracking-[0.08em] text-foreground leading-relaxed">
+                  {row.value}
+                </span>
+              </div>
             </div>
-          </div>
-
-          <div className="border-t border-border pt-16">
-            <h2 className="text-xs tracking-[0.15em] mb-8 text-foreground/60">
-              STUDIO
-            </h2>
-            <div className="space-y-3 text-sm leading-relaxed text-foreground/70">
-              <p>123 Fashion Avenue</p>
-              <p>New York, NY 10001</p>
-              <p>United States</p>
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-16">
-            <h2 className="text-xs tracking-[0.15em] mb-8 text-foreground/60">
-              SOCIAL
-            </h2>
-            <div className="space-y-3 text-sm leading-relaxed">
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block hover:opacity-60 transition-opacity text-foreground/70"
-              >
-                Instagram
-              </a>
-              <a 
-                href="https://twitter.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block hover:opacity-60 transition-opacity text-foreground/70"
-              >
-                Twitter
-              </a>
-              <a 
-                href="https://linkedin.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block hover:opacity-60 transition-opacity text-foreground/70"
-              >
-                LinkedIn
-              </a>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </main>
+          ))}
+        </div>
+      </main>
+    </>
   )
 }

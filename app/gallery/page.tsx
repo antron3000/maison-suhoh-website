@@ -1,0 +1,331 @@
+"use client"
+
+import { useState, useRef, useCallback } from "react"
+import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
+import TopBar from "@/components/top-bar"
+import { PageTransition } from "@/components/PageTransition"
+
+const PROJECTS = [
+  {
+    id: "01",
+    title: "Noir Campaign",
+    images: [
+      { src: "/images/photo-01.jpg", w: 180, h: 120 },
+      { src: "/images/photo-02.jpg", w: 90,  h: 120 },
+      { src: "/images/photo-03.jpg", w: 140, h: 120 },
+      { src: "/images/photo-01.jpg", w: 100, h: 120 },
+      { src: "/images/photo-02.jpg", w: 160, h: 120 },
+      { src: "/images/photo-03.jpg", w: 80,  h: 120 },
+      { src: "/images/photo-01.jpg", w: 120, h: 120 },
+      { src: "/images/photo-02.jpg", w: 150, h: 120 },
+      { src: "/images/photo-03.jpg", w: 90,  h: 120 },
+    ],
+  },
+  {
+    id: "02",
+    title: "Lumière Launch",
+    images: [
+      { src: "/images/lumiere-01.jpg", w: 100, h: 130 },
+      { src: "/images/lumiere-02.jpg", w: 100, h: 130 },
+      { src: "/images/lumiere-03.jpg", w: 160, h: 130 },
+      { src: "/images/lumiere-04.jpg", w: 160, h: 130 },
+      { src: "/images/lumiere-05.jpg", w: 100, h: 130 },
+      { src: "/images/lumiere-06.jpg", w: 100, h: 130 },
+      { src: "/images/lumiere-07.jpg", w: 140, h: 130 },
+      { src: "/images/lumiere-08.jpg", w: 100, h: 130 },
+      { src: "/images/lumiere-09.jpg", w: 100, h: 130 },
+      { src: "/images/lumiere-10.jpg", w: 140, h: 130 },
+    ],
+  },
+  {
+    id: "03",
+    title: "Séquoia Dinner",
+    images: [
+      { src: "/images/photo-03.jpg", w: 130, h: 115 },
+      { src: "/images/photo-01.jpg", w: 80,  h: 115 },
+      { src: "/images/photo-02.jpg", w: 190, h: 115 },
+      { src: "/images/photo-03.jpg", w: 100, h: 115 },
+      { src: "/images/photo-01.jpg", w: 150, h: 115 },
+      { src: "/images/photo-02.jpg", w: 90,  h: 115 },
+      { src: "/images/photo-03.jpg", w: 170, h: 115 },
+      { src: "/images/photo-01.jpg", w: 110, h: 115 },
+    ],
+  },
+  {
+    id: "04",
+    title: "Brand Story — Clé",
+    images: [
+      { src: "/images/brand-01.jpg", w: 160, h: 125 },
+      { src: "/images/brand-02.jpg", w: 100, h: 125 },
+      { src: "/images/brand-03.jpg", w: 140, h: 125 },
+      { src: "/images/brand-04.jpg", w: 90,  h: 125 },
+      { src: "/images/brand-05.jpg", w: 180, h: 125 },
+      { src: "/images/brand-06.jpg", w: 120, h: 125 },
+    ],
+  },
+]
+
+// All images flattened for View 2 & 3
+const ALL_IMAGES = PROJECTS.flatMap(p => p.images.map(img => ({ ...img, project: p.title })))
+
+// Scattered positions for View 2
+const SCATTERED = [
+  { x: 60,  y: 80,  w: 220, h: 160 },
+  { x: 310, y: 60,  w: 280, h: 200 },
+  { x: 620, y: 90,  w: 180, h: 140 },
+  { x: 100, y: 320, w: 240, h: 170 },
+  { x: 380, y: 310, w: 200, h: 155 },
+  { x: 30,  y: 560, w: 180, h: 140 },
+  { x: 260, y: 530, w: 260, h: 180 },
+  { x: 560, y: 290, w: 220, h: 165 },
+  { x: 700, y: 480, w: 190, h: 150 },
+]
+
+type ViewMode = "view1" | "view2" | "view3"
+
+// ── VIEW 1: Horizontal strips per project ──
+function View1() {
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
+  return (
+    <div className="pb-24 bg-background min-h-screen">
+      {PROJECTS.map((project) => (
+        <div
+          key={project.id}
+          className="relative py-8"
+          onMouseEnter={() => setHoveredProject(project.id)}
+          onMouseLeave={() => setHoveredProject(null)}
+        >
+          <AnimatePresence>
+            {hoveredProject === project.id && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.25 }}
+                className="absolute top-1 left-0 right-0 flex justify-center z-10 pointer-events-none"
+              >
+                <p className="text-[10px] tracking-[0.2em] text-foreground/70">
+                  {project.title.toUpperCase()}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div className="flex items-center gap-2 px-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex-shrink-0 text-[10px] tracking-[0.15em] text-foreground/40 w-6 text-right mr-2 self-end pb-1">
+              {project.id}
+            </div>
+            {project.images.map((img, i) => (
+              <div key={i} className="flex-shrink-0 relative overflow-hidden bg-muted" style={{ width: img.w, height: img.h }}>
+                <Image src={img.src} alt={`${project.title} ${i + 1}`} fill className="object-cover transition-transform duration-700 hover:scale-105" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// ── VIEW 2: BOWTE editorial scroll layout ──
+function View2() {
+  const imgs = ALL_IMAGES
+
+  // Helper component for a single image block
+  const Img = ({ src, aspect, className }: { src: string; aspect: string; className?: string }) => (
+    <motion.div
+      className={`relative overflow-hidden bg-muted ${className ?? ""}`}
+      style={{ aspectRatio: aspect }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
+      <Image src={src} alt="" fill className="object-cover transition-transform duration-700 hover:scale-105" />
+    </motion.div>
+  )
+
+  return (
+    <div className="bg-background pb-32 px-4 md:px-8 space-y-6 md:space-y-10 max-w-5xl mx-auto">
+
+      {/* 1 — Hero full width */}
+      {imgs[0] && <Img src={imgs[0].src} aspect="4/5" className="w-full" />}
+
+      {/* 2 — Single centered ~60% */}
+      {imgs[1] && (
+        <div className="flex justify-center">
+          <Img src={imgs[1].src} aspect="3/4" className="w-3/5" />
+        </div>
+      )}
+
+      {/* 3 — Two equal side by side */}
+      {imgs[2] && imgs[3] && (
+        <div className="flex gap-4">
+          <Img src={imgs[2].src} aspect="18/23" className="flex-1" />
+          <Img src={imgs[3].src} aspect="18/23" className="flex-1" />
+        </div>
+      )}
+
+      {/* 4 — Two equal side by side */}
+      {imgs[4] && imgs[5] && (
+        <div className="flex gap-4">
+          <Img src={imgs[4].src} aspect="4/5" className="flex-1" />
+          <Img src={imgs[5].src} aspect="4/5" className="flex-1" />
+        </div>
+      )}
+
+      {/* 5 — Single centered ~50% */}
+      {imgs[6] && (
+        <div className="flex justify-center">
+          <Img src={imgs[6].src} aspect="4/5" className="w-1/2" />
+        </div>
+      )}
+
+      {/* 6 — Asymmetric: small left, large right */}
+      {imgs[7] && imgs[8] && (
+        <div className="flex gap-4 items-end">
+          <Img src={imgs[7].src} aspect="16/22" className="w-1/3" />
+          <Img src={imgs[8].src} aspect="27/34" className="flex-1" />
+        </div>
+      )}
+
+      {/* 7 — Full width landscape */}
+      {imgs[9] && <Img src={imgs[9].src} aspect="45/34" className="w-full" />}
+
+      {/* 8 — Single centered ~55% */}
+      {imgs[10] && (
+        <div className="flex justify-center">
+          <Img src={imgs[10].src} aspect="18/23" className="w-[55%]" />
+        </div>
+      )}
+
+      {/* 9 — Two equal */}
+      {imgs[11] && imgs[12] && (
+        <div className="flex gap-4">
+          <Img src={imgs[11].src} aspect="21/26" className="flex-1" />
+          <Img src={imgs[12].src} aspect="21/26" className="flex-1" />
+        </div>
+      )}
+
+      {/* 10 — Two equal */}
+      {imgs[13] && imgs[14] && (
+        <div className="flex gap-4">
+          <Img src={imgs[13].src} aspect="4/5" className="flex-1" />
+          <Img src={imgs[14].src} aspect="4/5" className="flex-1" />
+        </div>
+      )}
+
+      {/* 11 — Full width landscape */}
+      {imgs[15] && <Img src={imgs[15].src} aspect="45/34" className="w-full" />}
+
+      {/* 12 — Asymmetric: large left, small right */}
+      {imgs[16] && imgs[17] && (
+        <div className="flex gap-4 items-end">
+          <Img src={imgs[16].src} aspect="27/34" className="flex-1" />
+          <Img src={imgs[17].src} aspect="16/22" className="w-1/3" />
+        </div>
+      )}
+
+      {/* 13 — Single centered */}
+      {imgs[18] && (
+        <div className="flex justify-center">
+          <Img src={imgs[18].src} aspect="4/5" className="w-1/2" />
+        </div>
+      )}
+
+      {/* 14 — Two equal */}
+      {imgs[19] && imgs[20] && (
+        <div className="flex gap-4">
+          <Img src={imgs[19].src} aspect="4/5" className="flex-1" />
+          <Img src={imgs[20].src} aspect="4/5" className="flex-1" />
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── VIEW 3: Clean 6-column grid ──
+const MIXED_IMAGES = [
+  ...ALL_IMAGES.filter((_, i) => i % 2 === 0),
+  ...ALL_IMAGES.filter((_, i) => i % 2 !== 0),
+].slice(0, 12)
+
+function View3() {
+  const [hovered, setHovered] = useState<number | null>(null)
+  return (
+    <div className="bg-background pb-24">
+      <div className="grid grid-cols-6 gap-0">
+        {MIXED_IMAGES.map((item, i) => (
+          <div
+            key={i}
+            className="relative cursor-pointer bg-white p-3 flex flex-col"
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/4" }}>
+              <Image src={item.src} alt={`Photo ${i + 1}`} fill className="object-cover transition-transform duration-500 hover:scale-105" />
+              {hovered === i && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white"
+                >
+                  <p className="text-[9px] tracking-[0.15em]">{item.project.toUpperCase()}</p>
+                </motion.div>
+              )}
+            </div>
+            <p className="text-[9px] tracking-[0.12em] text-foreground/40 mt-1 text-center">
+              {String(i + 1).padStart(2, "0")}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default function GalleryPage() {
+  const [view, setView] = useState<ViewMode>("view1")
+
+  return (
+    <>
+      <TopBar />
+
+      {/* Sub-nav */}
+      <div className="fixed top-14 left-0 right-0 z-30 bg-background">
+        <div className="flex items-center justify-center gap-10 py-2">
+          {(["view1", "view2", "view3"] as ViewMode[]).map((v, i) => (
+            <button
+              key={v}
+              onClick={() => setView(v)}
+              className={`text-[10px] tracking-[0.2em] transition-opacity pb-1 ${
+                view === v
+                  ? "opacity-100 border-b border-foreground"
+                  : "opacity-40 hover:opacity-70"
+              }`}
+            >
+              VIEW {i + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content — offset for both top bars */}
+      <div className="pt-40">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={view}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {view === "view1" && <View3 />}
+            {view === "view2" && <View2 />}
+            {view === "view3" && <View1 />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </>
+  )
+}

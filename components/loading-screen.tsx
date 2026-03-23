@@ -44,10 +44,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       >
         {!showLogo ? (
           <div className="w-full max-w-md px-8">
-            <p className="text-sm tracking-[0.3em] mb-8 text-center font-light">
-              MAISON SUKOH
-            </p>
-            <div className="h-px bg-border relative overflow-hidden">
+            <div className="h-px bg-border relative overflow-hidden mb-4">
               <motion.div
                 className="absolute inset-y-0 left-0 bg-foreground"
                 initial={{ width: "0%" }}
