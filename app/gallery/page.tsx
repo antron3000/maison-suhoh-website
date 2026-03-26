@@ -136,7 +136,19 @@ function gaussianScale(distPx: number): number {
 
 function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
   const [cursorX, setCursorX] = useState<number | null>(null)
-  const imgRefs = useRef<(HTMLDivElement | null)[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Precompute natural (unscaled) center X of each image relative to container left
+  // This never changes, so no feedback loop
+  const naturalCenters = useMemo(() => {
+    const GAP = 4
+    let x = 0
+    return project.images.map(img => {
+      const cx = x + img.w / 2
+      x += img.w + GAP
+      return cx
+    })
+  }, [project.images])
 
   return (
     <div className="relative py-5">
@@ -145,18 +157,19 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
           {project.id}
         </span>
         <div
+          ref={containerRef}
           className="flex items-center gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          onMouseMove={e => setCursorX(e.clientX)}
+          onMouseMove={e => {
+            const rect = containerRef.current?.getBoundingClientRect()
+            if (rect) setCursorX(e.clientX - rect.left + (containerRef.current?.scrollLeft ?? 0))
+          }}
           onMouseLeave={() => setCursorX(null)}
         >
           {project.images.map((img, i) => {
-            // Measure distance from cursor to the natural centre of this image slot
             let scale = 1
             let opacity = 1
-            if (cursorX !== null && imgRefs.current[i]) {
-              const rect = imgRefs.current[i]!.getBoundingClientRect()
-              const cx = rect.left + rect.width / 2
-              const distPx = Math.abs(cursorX - cx)
+            if (cursorX !== null) {
+              const distPx = Math.abs(cursorX - naturalCenters[i])
               scale = gaussianScale(distPx)
               opacity = 0.3 + 0.7 * Math.exp(-0.5 * (distPx / (FISHEYE_SIGMA * 1.6)) ** 2)
             }
@@ -164,7 +177,6 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
             return (
               <motion.div
                 key={i}
-                ref={el => { imgRefs.current[i] = el }}
                 className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
                 animate={{
                   width: img.w * scale,
