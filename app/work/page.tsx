@@ -14,7 +14,7 @@ const PROJECTS = [
     slug: "darkos",
     title: "Darkos",
     year: "2026",
-    category: "EDITORIAL",
+    category: "CAMPAIGN",
     image: "/images/darkos-02.jpg",
   },
   {
@@ -38,7 +38,7 @@ const PROJECTS = [
     slug: "for-the-geng-only",
     title: "For The Geng Only",
     year: "2025",
-    category: "EVENT",
+    category: "CAMPAIGN",
     image: "/images/ftg-01.jpg",
   },
   {
