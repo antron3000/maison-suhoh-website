@@ -1,9 +1,9 @@
 "use client"
 
 import Footer from "@/components/footer"
-import { useState, useRef, useCallback } from "react"
+import { useState } from "react"
 import Image from "next/image"
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
 import { PageTransition } from "@/components/PageTransition"
 
@@ -159,15 +159,10 @@ function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
 }
 
 // ── VIEW 2: BOWTE editorial scroll layout ──
-function ParallaxHero({ src }: { src: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
-  const y = useTransform(scrollYProgress, [0, 1], ["-40%", "40%"])
-
+function HeroImage({ src }: { src: string }) {
   return (
     <div className="flex justify-end">
       <motion.div
-        ref={ref}
         className="relative overflow-hidden bg-muted w-[55%]"
         style={{ aspectRatio: "4/5" }}
         initial={{ opacity: 0, y: 20 }}
@@ -175,9 +170,7 @@ function ParallaxHero({ src }: { src: string }) {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div className="absolute inset-[-40%_0] " style={{ y }}>
-          <Image src={src} alt="" fill quality={100} className="object-cover" />
-        </motion.div>
+        <Image src={src} alt="" fill quality={100} className="object-cover" />
       </motion.div>
     </div>
   )
@@ -203,8 +196,8 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   return (
     <div className="bg-background pb-32 px-4 md:px-8 space-y-6 md:space-y-10 max-w-5xl mx-auto">
 
-      {/* 1 — Hero: smaller, right-aligned, parallax */}
-      {imgs[0] && <ParallaxHero src={imgs[0].src} />}
+      {/* 1 — Hero: smaller, right-aligned */}
+      {imgs[0] && <HeroImage src={imgs[0].src} />}
 
       {/* 2 — Single centered ~60% */}
       {imgs[1] && (
