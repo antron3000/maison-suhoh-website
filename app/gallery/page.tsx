@@ -49,8 +49,10 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
   const [cursorX, setCursorX] = useState<number | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Precompute natural (unscaled) center X of each image relative to container left
+  // This never changes, so no feedback loop
   const naturalCenters = useMemo(() => {
-    const GAP = 2
+    const GAP = 4
     let x = 0
     return project.images.map(img => {
       const cx = x + img.w / 2
@@ -60,39 +62,51 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
   }, [project.images])
 
   return (
-    <div
-      ref={containerRef}
-      className="flex items-stretch w-full overflow-hidden cursor-crosshair"
-      style={{ height: 130 }}
-      onMouseMove={e => {
-        const rect = containerRef.current?.getBoundingClientRect()
-        if (rect) setCursorX(e.clientX - rect.left)
-      }}
-      onMouseLeave={() => setCursorX(null)}
-    >
-      {project.images.map((img, i) => {
-        const scale = cursorX !== null
-          ? gaussianScale(Math.abs(cursorX - naturalCenters[i]))
-          : 1
+    <div className="relative py-5">
+      <div className="flex items-center">
+        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
+          {project.id}
+        </span>
+        <div
+          ref={containerRef}
+          className="flex items-center gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          onMouseMove={e => {
+            const rect = containerRef.current?.getBoundingClientRect()
+            if (rect) setCursorX(e.clientX - rect.left + (containerRef.current?.scrollLeft ?? 0))
+          }}
+          onMouseLeave={() => setCursorX(null)}
+        >
+          {project.images.map((img, i) => {
+            let scale = 1
+            let opacity = 1
+            if (cursorX !== null) {
+              const distPx = Math.abs(cursorX - naturalCenters[i])
+              scale = gaussianScale(distPx)
+            }
 
-        return (
-          <motion.div
-            key={i}
-            className="relative overflow-hidden bg-muted flex-1 min-w-0"
-            animate={{ scaleX: scale }}
-            style={{ transformOrigin: "center" }}
-            transition={{ type: "spring", stiffness: 180, damping: 30, mass: 0.7 }}
-          >
-            <Image
-              src={img.src}
-              alt={`${project.title} ${i + 1}`}
-              fill
-              quality={100}
-              className="object-cover"
-            />
-          </motion.div>
-        )
-      })}
+            return (
+              <motion.div
+                key={i}
+                className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
+                animate={{
+                  width: img.w * scale,
+                  height: img.h * scale,
+                  opacity,
+                }}
+                transition={{ type: "spring", stiffness: 180, damping: 30, mass: 0.7 }}
+              >
+                <Image
+                  src={img.src}
+                  alt={`${project.title} ${i + 1}`}
+                  fill
+                  quality={100}
+                  className="object-cover"
+                />
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
@@ -100,16 +114,8 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
 function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
   return (
     <div className="pb-32 bg-background min-h-screen">
-      {filteredProjects.map((project, idx) => (
-        <div key={project.id}>
-          {/* Black square divider between sections */}
-          {idx > 0 && (
-            <div className="flex items-center justify-center py-3">
-              <div className="w-2 h-2 bg-foreground" />
-            </div>
-          )}
-          <FilmStripRow project={project} />
-        </div>
+      {filteredProjects.map((project) => (
+        <FilmStripRow key={project.id} project={project} />
       ))}
     </div>
   )
