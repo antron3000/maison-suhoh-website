@@ -1,7 +1,7 @@
 "use client"
 
 import Footer from "@/components/footer"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
@@ -126,36 +126,64 @@ const SCATTERED = [
 type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
-// ── Film strip row ──
+// ── Fisheye film strip row ──
+const FISHEYE_RADIUS = 260  // px influence radius
+const MAX_SCALE = 1.9       // peak scale at cursor center
+const MIN_OPACITY = 0.35    // opacity of far images
+
+function gaussianScale(dist: number): number {
+  if (dist > FISHEYE_RADIUS) return 1
+  // Gaussian falloff: peaks at 1→MAX_SCALE at center, eases to 1 at edge
+  return 1 + (MAX_SCALE - 1) * Math.exp(-0.5 * Math.pow(dist / (FISHEYE_RADIUS * 0.4), 2))
+}
+
 function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const stripRef = useRef<HTMLDivElement>(null)
+  const [cursorX, setCursorX] = useState<number | null>(null)
+  const imgRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setCursorX(e.clientX)
+  }
+
+  const handleMouseLeave = () => {
+    setCursorX(null)
+  }
+
+  // Compute scale & opacity per image based on cursor distance to image center
+  const getTransform = (i: number) => {
+    if (cursorX === null || !imgRefs.current[i]) return { scale: 1, opacity: 1 }
+    const el = imgRefs.current[i]!
+    const rect = el.getBoundingClientRect()
+    const imgCenterX = rect.left + rect.width / 2
+    const dist = Math.abs(cursorX - imgCenterX)
+    const scale = gaussianScale(dist)
+    const opacity = dist > FISHEYE_RADIUS ? MIN_OPACITY : MIN_OPACITY + (1 - MIN_OPACITY) * Math.exp(-0.5 * Math.pow(dist / (FISHEYE_RADIUS * 0.5), 2))
+    return { scale, opacity }
+  }
 
   return (
-    <div className="relative py-6 border-t border-foreground/8">
+    <div className="relative py-5 border-t border-foreground/8">
       <div className="flex items-center">
         <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
           {project.id}
         </span>
-        {/* Scrollable strip */}
         <div
+          ref={stripRef}
           className="flex items-center gap-[6px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          onMouseLeave={() => setHoveredIdx(null)}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         >
           {project.images.map((img, i) => {
-            const isHovered = hoveredIdx === i
-            const isNear = hoveredIdx !== null && Math.abs(hoveredIdx - i) === 1
-            const scale = isHovered ? 1.15 : isNear ? 1.05 : 1
-            const opacity = hoveredIdx === null ? 1 : isHovered ? 1 : isNear ? 0.7 : 0.4
-
+            const { scale, opacity } = getTransform(i)
             return (
               <motion.div
                 key={i}
+                ref={el => { imgRefs.current[i] = el }}
                 className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
-                style={{ width: img.w, height: img.h, transformOrigin: "center center" }}
+                style={{ width: img.w, height: img.h, transformOrigin: "center bottom" }}
                 animate={{ scale, opacity }}
-                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
+                transition={{ duration: 0.12, ease: "easeOut" }}
               >
                 <Image
                   src={img.src}
