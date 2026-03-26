@@ -1,7 +1,7 @@
 "use client"
 
 import Footer from "@/components/footer"
-import { useState, useMemo, useRef } from "react"
+import { useState, useMemo } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
@@ -36,77 +36,27 @@ const SCATTERED = [
 
 type ViewMode = "view1" | "view2" | "view3"
 
-// ── VIEW 1: Horizontal strips per project ──
-// ── Fisheye film strip row ──
-const FISHEYE_SIGMA = 130  // px — spread of the lens
-const FISHEYE_PEAK = 1.45  // max scale at cursor
-
-function gaussianScale(distPx: number): number {
-  return 1 + (FISHEYE_PEAK - 1) * Math.exp(-0.5 * (distPx / FISHEYE_SIGMA) ** 2)
-}
-
+// ── VIEW 1: Horizontal film strips per project ──
 function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
-  const [cursorX, setCursorX] = useState<number | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  // Precompute natural (unscaled) center X of each image relative to container left
-  // This never changes, so no feedback loop
-  const naturalCenters = useMemo(() => {
-    const GAP = 4
-    let x = 0
-    return project.images.map(img => {
-      const cx = x + img.w / 2
-      x += img.w + GAP
-      return cx
-    })
-  }, [project.images])
+  const ROW_HEIGHT = 140
 
   return (
-    <div className="relative py-5">
-      <div className="flex items-center">
-        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
-          {project.id}
-        </span>
+    <div className="flex w-full" style={{ height: ROW_HEIGHT }}>
+      {project.images.map((img, i) => (
         <div
-          ref={containerRef}
-          className="flex items-center gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          onMouseMove={e => {
-            const rect = containerRef.current?.getBoundingClientRect()
-            if (rect) setCursorX(e.clientX - rect.left + (containerRef.current?.scrollLeft ?? 0))
-          }}
-          onMouseLeave={() => setCursorX(null)}
+          key={i}
+          className="relative overflow-hidden bg-muted flex-1"
+          style={{ minWidth: 0 }}
         >
-          {project.images.map((img, i) => {
-            let scale = 1
-            let opacity = 1
-            if (cursorX !== null) {
-              const distPx = Math.abs(cursorX - naturalCenters[i])
-              scale = gaussianScale(distPx)
-            }
-
-            return (
-              <motion.div
-                key={i}
-                className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
-                animate={{
-                  width: img.w * scale,
-                  height: img.h * scale,
-                  opacity,
-                }}
-                transition={{ type: "spring", stiffness: 180, damping: 30, mass: 0.7 }}
-              >
-                <Image
-                  src={img.src}
-                  alt={`${project.title} ${i + 1}`}
-                  fill
-                  quality={100}
-                  className="object-cover"
-                />
-              </motion.div>
-            )
-          })}
+          <Image
+            src={img.src}
+            alt={`${project.title} ${i + 1}`}
+            fill
+            quality={100}
+            className="object-cover transition-transform duration-500 hover:scale-105"
+          />
         </div>
-      </div>
+      ))}
     </div>
   )
 }
