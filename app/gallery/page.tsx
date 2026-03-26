@@ -131,31 +131,29 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   return (
-    <div className="relative group py-6 border-t border-foreground/8">
-      {/* Row label */}
-      <div className="flex items-start">
-        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pt-[6px] pl-8 select-none">
+    <div className="relative py-6 border-t border-foreground/8">
+      <div className="flex items-center">
+        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
           {project.id}
         </span>
         {/* Scrollable strip */}
         <div
-          className="flex items-end gap-[6px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab active:cursor-grabbing"
+          className="flex items-center gap-[6px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           onMouseLeave={() => setHoveredIdx(null)}
         >
           {project.images.map((img, i) => {
             const isHovered = hoveredIdx === i
             const isNear = hoveredIdx !== null && Math.abs(hoveredIdx - i) === 1
-            const scale = isHovered ? 1.18 : isNear ? 1.06 : 1
-            const opacity = hoveredIdx === null ? 1 : isHovered ? 1 : isNear ? 0.75 : 0.45
-            const h = isHovered ? img.h * 1.18 : img.h
+            const scale = isHovered ? 1.15 : isNear ? 1.05 : 1
+            const opacity = hoveredIdx === null ? 1 : isHovered ? 1 : isNear ? 0.7 : 0.4
 
             return (
               <motion.div
                 key={i}
                 className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
-                style={{ width: img.w, height: h }}
+                style={{ width: img.w, height: img.h, transformOrigin: "center center" }}
                 animate={{ scale, opacity }}
-                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
               >
