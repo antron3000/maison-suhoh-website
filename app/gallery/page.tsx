@@ -171,7 +171,6 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
             if (cursorX !== null) {
               const distPx = Math.abs(cursorX - naturalCenters[i])
               scale = gaussianScale(distPx)
-              opacity = 0.3 + 0.7 * Math.exp(-0.5 * (distPx / (FISHEYE_SIGMA * 1.6)) ** 2)
             }
 
             return (
