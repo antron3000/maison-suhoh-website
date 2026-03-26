@@ -6,6 +6,7 @@ import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
 import { PageTransition } from "@/components/PageTransition"
+import { PROJECTS, TAG_FILTER } from "@/lib/projects"
 
 // Fisher-Yates shuffle (returns new array)
 function shuffle<T>(arr: T[]): T[] {
@@ -16,96 +17,6 @@ function shuffle<T>(arr: T[]): T[] {
   }
   return a
 }
-
-// Tag → project title mapping
-const TAG_FILTER: Record<string, string[]> = {
-  "ALL": [],
-  "EDITORIAL": ["Noir Campaign", "Revival in Ghana", "#GRWM"],
-  "CAMPAIGN": ["Revival in Ghana", "Nora Pop Photography"],
-  "FASHION PHOTOGRAPHY": ["Noir Campaign", "For The Geng Only", "#GRWM"],
-  "FILM": ["For The Geng Only"],
-  "EVENTS": ["Ghana Food Movement", "For The Geng Only", "#GRWM"],
-  "CREATIVE DIRECTION": ["Noir Campaign", "For The Geng Only", "Nora Pop Photography", "#GRWM"],
-  "BRAND": ["Nora Pop Photography"],
-  "SS26": ["Revival in Ghana", "#GRWM"],
-  "FW26": ["Noir Campaign"],
-}
-
-const PROJECTS = [
-  {
-    id: "00",
-    title: "#GRWM",
-    images: [
-      { src: "/images/grwm-01.jpg", w: 120, h: 120 },
-      { src: "/images/grwm-02.jpg", w: 90,  h: 120 },
-
-      { src: "/images/grwm-04.jpg", w: 100, h: 120 },
-      { src: "/images/grwm-05.jpg", w: 90,  h: 120 },
-      { src: "/images/grwm-06.jpg", w: 130, h: 120 },
-      { src: "/images/grwm-07.jpg", w: 90,  h: 120 },
-      { src: "/images/grwm-08.jpg", w: 90,  h: 120 },
-      { src: "/images/grwm-09.jpg", w: 90,  h: 120 },
-      { src: "/images/grwm-10.jpg", w: 90,  h: 120 },
-    ],
-  },
-  {
-    id: "01",
-    title: "Noir Campaign",
-    images: [
-      { src: "/images/photo-01.jpg", w: 180, h: 120 },
-      { src: "/images/photo-02.jpg", w: 90,  h: 120 },
-      { src: "/images/photo-03.jpg", w: 140, h: 120 },
-      { src: "/images/photo-01.jpg", w: 100, h: 120 },
-      { src: "/images/photo-02.jpg", w: 160, h: 120 },
-      { src: "/images/photo-03.jpg", w: 80,  h: 120 },
-      { src: "/images/photo-01.jpg", w: 120, h: 120 },
-      { src: "/images/photo-02.jpg", w: 150, h: 120 },
-      { src: "/images/photo-03.jpg", w: 90,  h: 120 },
-    ],
-  },
-  {
-    id: "02",
-    title: "Revival in Ghana",
-    images: [
-      { src: "/images/lumiere-01.jpg", w: 100, h: 130 },
-      { src: "/images/lumiere-02.jpg", w: 100, h: 130 },
-      { src: "/images/lumiere-03.jpg", w: 160, h: 130 },
-      { src: "/images/lumiere-04.jpg", w: 160, h: 130 },
-      { src: "/images/lumiere-05.jpg", w: 100, h: 130 },
-      { src: "/images/lumiere-06.jpg", w: 100, h: 130 },
-      { src: "/images/lumiere-07.jpg", w: 140, h: 130 },
-      { src: "/images/lumiere-08.jpg", w: 100, h: 130 },
-      { src: "/images/lumiere-09.jpg", w: 100, h: 130 },
-      { src: "/images/lumiere-10.jpg", w: 140, h: 130 },
-    ],
-  },
-  {
-    id: "03",
-    title: "For The Geng Only",
-    images: [
-      { src: "/images/photo-03.jpg", w: 130, h: 115 },
-      { src: "/images/photo-01.jpg", w: 80,  h: 115 },
-      { src: "/images/photo-02.jpg", w: 190, h: 115 },
-      { src: "/images/photo-03.jpg", w: 100, h: 115 },
-      { src: "/images/photo-01.jpg", w: 150, h: 115 },
-      { src: "/images/photo-02.jpg", w: 90,  h: 115 },
-      { src: "/images/photo-03.jpg", w: 170, h: 115 },
-      { src: "/images/photo-01.jpg", w: 110, h: 115 },
-    ],
-  },
-  {
-    id: "04",
-    title: "Nora Pop Photography",
-    images: [
-      { src: "/images/brand-01.jpg", w: 160, h: 125 },
-      { src: "/images/brand-02.jpg", w: 100, h: 125 },
-      { src: "/images/brand-03.jpg", w: 140, h: 125 },
-      { src: "/images/brand-04.jpg", w: 90,  h: 125 },
-      { src: "/images/brand-05.jpg", w: 180, h: 125 },
-      { src: "/images/brand-06.jpg", w: 120, h: 125 },
-    ],
-  },
-]
 
 // All images flattened for View 2 & 3
 const ALL_IMAGES = PROJECTS.flatMap(p => p.images.map(img => ({ ...img, project: p.title })))

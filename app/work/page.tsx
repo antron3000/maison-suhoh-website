@@ -7,58 +7,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { PageTransition } from "@/components/PageTransition"
 import TopBar from "@/components/top-bar"
-
-const PROJECTS = [
-  {
-    id: "001",
-    slug: "darkos",
-    title: "Darkos",
-    year: "2026",
-    category: "CAMPAIGN",
-    image: "/images/darkos-02.jpg",
-  },
-  {
-    id: "002",
-    slug: "grwm",
-    title: "#GRWM",
-    year: "2026",
-    category: "CAMPAIGN",
-    image: "/images/grwm-01.jpg",
-  },
-  {
-    id: "006",
-    slug: "ghana-food-movement",
-    title: "Ghana Food Movement",
-    year: "2026",
-    category: "EVENT",
-    image: "/images/ghana-01.jpg",
-  },
-  {
-    id: "003",
-    slug: "revival-in-ghana",
-    title: "Revival in Ghana",
-    year: "2025",
-    category: "CAMPAIGN",
-    image: "/images/lumiere-08.jpg",
-  },
-  {
-    id: "004",
-    slug: "for-the-geng-only",
-    title: "For The Geng Only",
-    year: "2025",
-    category: "CAMPAIGN",
-    image: "/images/ftg-01.jpg",
-  },
-  {
-    id: "005",
-    slug: "nora-pop-photography",
-    title: "Nora Pop Photography",
-    year: "2024",
-    category: "CATALOGUE",
-    image: "/images/brand-01.jpg",
-  },
-
-]
+import { PROJECTS_SORTED as PROJECTS } from "@/lib/projects"
 
 export default function WorkPage() {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null)
@@ -69,7 +18,7 @@ export default function WorkPage() {
       <PageTransition className="px-4 md:px-8 py-16 min-h-screen relative flex flex-col justify-center">
         {/* Fixed image reveal on hover — left side, desktop only */}
         <div className="fixed top-1/2 -translate-y-1/2 left-16 w-[400px] aspect-[3/4] pointer-events-none hidden md:block z-0">
-          {[...PROJECTS].sort((a, b) => Number(b.year) - Number(a.year)).map((project) => (
+          {PROJECTS.map((project) => (
             <div
               key={project.id}
               className={`absolute inset-0 w-full h-full transition-all duration-700 ease-out ${
@@ -91,7 +40,7 @@ export default function WorkPage() {
         {/* Project list — aligned to right */}
         <div className="max-w-2xl relative z-10 w-full ml-auto md:mr-16">
           <div className="border-t-2 border-foreground" />
-          {[...PROJECTS].sort((a, b) => Number(b.year) - Number(a.year)).map((project) => (
+          {PROJECTS.map((project) => (
             <Link href={`/work/${project.slug}`} key={project.id}>
               <motion.div
                 className="group flex flex-col sm:flex-row sm:items-center justify-between py-1 md:py-1 border-b-2 border-foreground cursor-pointer"
