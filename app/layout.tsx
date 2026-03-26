@@ -3,7 +3,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/lib/LanguageContext";
 
 export const metadata: Metadata = {
-  title: "Maison SUKOH - Creative Studio",
+  title: "Maison SUKOH",
   description: "A creative studio specializing in fashion photography, art direction, and brand storytelling.",
 };
 
