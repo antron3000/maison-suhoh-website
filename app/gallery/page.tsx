@@ -1,11 +1,21 @@
 "use client"
 
 import Footer from "@/components/footer"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
 import { PageTransition } from "@/components/PageTransition"
+
+// Fisher-Yates shuffle (returns new array)
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
 
 // Tag → project title mapping
 const TAG_FILTER: Record<string, string[]> = {
@@ -301,10 +311,7 @@ const MIXED_IMAGES = [
 function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   const [hovered, setHovered] = useState<number | null>(null)
   const [lightbox, setLightbox] = useState<{ src: string; project: string } | null>(null)
-  const mixed = [
-    ...filteredImages.filter((_, i) => i % 2 === 0),
-    ...filteredImages.filter((_, i) => i % 2 !== 0),
-  ].slice(0, 12)
+  const mixed = filteredImages.slice(0, 12)
   return (
     <div className="bg-background pb-24">
       <div className="grid grid-cols-4 gap-0">
@@ -382,11 +389,17 @@ export default function GalleryPage() {
   const [view, setView] = useState<ViewMode>("view1")
   const [activeTag, setActiveTag] = useState("ALL")
 
-  const filteredProjects = activeTag === "ALL"
-    ? PROJECTS
-    : PROJECTS.filter(p => TAG_FILTER[activeTag]?.includes(p.title))
+  const filteredProjects = useMemo(() => {
+    const projects = activeTag === "ALL"
+      ? PROJECTS
+      : PROJECTS.filter(p => TAG_FILTER[activeTag]?.includes(p.title))
+    // Shuffle images within each project row (View 3 / strip view)
+    return projects.map(p => ({ ...p, images: shuffle(p.images) }))
+  }, [activeTag])
 
-  const filteredImages = filteredProjects.flatMap(p => p.images.map(img => ({ ...img, project: p.title })))
+  const filteredImages = useMemo(() =>
+    shuffle(filteredProjects.flatMap(p => p.images.map(img => ({ ...img, project: p.title }))))
+  , [activeTag])
 
   return (
     <>
