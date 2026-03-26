@@ -126,10 +126,12 @@ const SCATTERED = [
 type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
+type TaggedImage = typeof ALL_IMAGES[number] & { projId: string }
+
 // Justified row layout: pack images into rows by their aspect ratios
-function buildRows(images: typeof ALL_IMAGES, targetRowHeight: number, containerWidth: number) {
-  const rows: (typeof ALL_IMAGES)[] = []
-  let row: typeof ALL_IMAGES = []
+function buildRows(images: TaggedImage[], targetRowHeight: number, containerWidth: number) {
+  const rows: TaggedImage[][] = []
+  let row: TaggedImage[] = []
   let rowWidth = 0
   for (const img of images) {
     const aspectRatio = img.w / img.h
@@ -147,8 +149,10 @@ function buildRows(images: typeof ALL_IMAGES, targetRowHeight: number, container
 }
 
 function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
-  const allImgs = filteredProjects.flatMap(p => p.images.map(img => ({ ...img, project: p.title })))
-  const TARGET_H = 200
+  const allImgs: TaggedImage[] = filteredProjects.flatMap(p =>
+    p.images.map(img => ({ ...img, project: p.title, projId: p.id }))
+  )
+  const TARGET_H = 220
   const CONTAINER_W = typeof window !== "undefined" ? window.innerWidth - 64 : 1200
   const rows = buildRows(allImgs, TARGET_H, CONTAINER_W)
 
@@ -156,15 +160,27 @@ function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
     <div className="pb-24 bg-background min-h-screen px-8">
       {rows.map((row, ri) => {
         const totalAspect = row.reduce((sum, img) => sum + img.w / img.h, 0)
+
+        // Find where each new project starts within this row
+        const labels: { id: string; leftPct: number }[] = []
+        let cumAspect = 0
+        let lastId: string | null = null
+        for (const img of row) {
+          if (img.projId !== lastId) {
+            labels.push({ id: img.projId, leftPct: (cumAspect / totalAspect) * 100 })
+            lastId = img.projId
+          }
+          cumAspect += img.w / img.h
+        }
+
         return (
-          <div key={ri} className="flex gap-[2px] mb-[2px]">
-            {row.map((img, i) => {
-              const flex = (img.w / img.h) / totalAspect
-              return (
+          <div key={ri} className="mb-1">
+            <div className="flex gap-[2px]">
+              {row.map((img, i) => (
                 <div
                   key={i}
                   className="relative overflow-hidden bg-muted"
-                  style={{ flex, minWidth: 0, height: TARGET_H }}
+                  style={{ flex: (img.w / img.h) / totalAspect, minWidth: 0, height: TARGET_H }}
                 >
                   <Image
                     src={img.src}
@@ -174,8 +190,20 @@ function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
                     className="object-cover transition-transform duration-700 hover:scale-105"
                   />
                 </div>
-              )
-            })}
+              ))}
+            </div>
+            {/* Project number labels below each row */}
+            <div className="relative h-5">
+              {labels.map(label => (
+                <span
+                  key={label.id}
+                  className="absolute text-[10px] tracking-[0.15em] text-foreground/35 mt-1"
+                  style={{ left: `${label.leftPct}%` }}
+                >
+                  {label.id}
+                </span>
+              ))}
+            </div>
           </div>
         )
       })}
