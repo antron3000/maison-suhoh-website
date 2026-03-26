@@ -123,23 +123,7 @@ export const PROJECTS: Project[] = [
       { src: "/images/ftg-05.jpg", w: 150, h: 115 },
     ],
   },
-  {
-    id: "008",
-    slug: "noir-campaign",
-    title: "Noir Campaign",
-    year: "2025",
-    category: "CAMPAIGN",
-    image: "/images/noir-01.jpg",
-    images: [
-      { src: "/images/noir-01.jpg", w: 120, h: 130 },
-      { src: "/images/noir-02.jpg", w: 100, h: 130 },
-      { src: "/images/noir-03.jpg", w: 140, h: 130 },
-      { src: "/images/noir-04.jpg", w: 110, h: 130 },
-      { src: "/images/noir-05.jpg", w: 130, h: 130 },
-      { src: "/images/noir-06.jpg", w: 100, h: 130 },
-      { src: "/images/noir-07.jpg", w: 120, h: 130 },
-    ],
-  },
+
   {
     id: "005",
     slug: "nora-pop-photography",
@@ -166,13 +150,13 @@ export const PROJECTS_SORTED = [...PROJECTS].sort(
 // Tag → project title mapping (used by /gallery page)
 export const TAG_FILTER: Record<string, string[]> = {
   "ALL": [],
-  "EDITORIAL": ["Revival in Ghana", "#GRWM", "Noir Campaign"],
-  "CAMPAIGN": ["Darkos", "#GRWM", "Revival in Ghana", "For The Geng Only", "Noir Campaign"],
-  "FASHION PHOTOGRAPHY": ["Darkos", "For The Geng Only", "#GRWM", "Noir Campaign"],
+  "EDITORIAL": ["Revival in Ghana", "#GRWM"],
+  "CAMPAIGN": ["Darkos", "#GRWM", "Revival in Ghana", "For The Geng Only"],
+  "FASHION PHOTOGRAPHY": ["Darkos", "For The Geng Only", "#GRWM"],
   "FILM": ["For The Geng Only"],
   "EVENTS": ["Ghana Food Movement", "Push Runway Show", "For The Geng Only"],
   "CREATIVE DIRECTION": ["Darkos", "For The Geng Only", "Nora Pop Photography", "#GRWM"],
   "BRAND": ["Nora Pop Photography"],
   "SS26": ["Revival in Ghana", "#GRWM", "Push Runway Show"],
-  "FW26": ["Darkos", "Noir Campaign"],
+  "FW26": ["Darkos"],
 }
