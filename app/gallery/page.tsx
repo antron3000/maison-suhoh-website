@@ -28,7 +28,7 @@ const PROJECTS = [
     images: [
       { src: "/images/grwm-01.jpg", w: 120, h: 120 },
       { src: "/images/grwm-02.jpg", w: 90,  h: 120 },
-      { src: "/images/grwm-03.jpg", w: 140, h: 120 },
+
       { src: "/images/grwm-04.jpg", w: 100, h: 120 },
       { src: "/images/grwm-05.jpg", w: 90,  h: 120 },
       { src: "/images/grwm-06.jpg", w: 130, h: 120 },

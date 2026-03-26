@@ -9,7 +9,6 @@ import TopBar from "@/components/top-bar"
 const IMAGES = [
   "/images/grwm-01.jpg",
   "/images/grwm-02.jpg",
-  "/images/grwm-03.jpg",
   "/images/grwm-04.jpg",
   "/images/grwm-05.jpg",
   "/images/grwm-06.jpg",
