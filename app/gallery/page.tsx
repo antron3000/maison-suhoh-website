@@ -158,30 +158,28 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
         </span>
         <div
           ref={containerRef}
-          className="flex items-center gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex items-center gap-[4px] flex-1 min-w-0 pr-8"
           onMouseMove={e => {
             const rect = containerRef.current?.getBoundingClientRect()
-            if (rect) setCursorX(e.clientX - rect.left + (containerRef.current?.scrollLeft ?? 0))
+            if (rect) setCursorX(e.clientX - rect.left)
           }}
           onMouseLeave={() => setCursorX(null)}
         >
           {project.images.map((img, i) => {
-            let scale = 1
-            let opacity = 1
+            // Base flex = aspect ratio so images share row proportionally
+            const aspect = img.w / img.h
+            let flexScale = aspect
             if (cursorX !== null) {
               const distPx = Math.abs(cursorX - naturalCenters[i])
-              scale = gaussianScale(distPx)
+              flexScale = aspect * gaussianScale(distPx)
             }
 
             return (
               <motion.div
                 key={i}
-                className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
-                animate={{
-                  width: img.w * scale,
-                  height: img.h * scale,
-                  opacity,
-                }}
+                className="relative overflow-hidden bg-muted cursor-pointer"
+                style={{ height: img.h }}
+                animate={{ flex: flexScale }}
                 transition={{ type: "spring", stiffness: 180, damping: 30, mass: 0.7 }}
               >
                 <Image
