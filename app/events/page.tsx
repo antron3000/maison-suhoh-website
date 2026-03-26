@@ -28,10 +28,10 @@ const EVENTS = [
   },
   {
     id: "02",
-    title: "LUMIÈRE\nLAUNCH",
-    subtitle: "A brand launch evening celebrating light, identity, and the art of the reveal.",
-    date: "MAY 03, 2026",
-    location: "MONTREAL, CA",
+    title: "DECENTRALISE\nGENTLEMAN MEMBER LAUNCH",
+    subtitle: "An exclusive member launch celebrating the new era of the Decentralise Gentleman.",
+    date: "APR 20, 2026",
+    location: "CASA TELUM, TORONTO",
     category: "BRAND EVENT",
     image: "/images/lumiere-01.jpg",
     hero: "/images/lumiere-04.jpg",
@@ -42,7 +42,7 @@ const EVENTS = [
       { label: "SEASON", value: "SS26" },
     ],
     services: ["PHOTOGRAPHY", "VIDEOGRAPHY", "POST-PRODUCTION"],
-    clients: ["LUMIÈRE", "MAISON SUKOH"],
+    clients: ["DECENTRALISE", "MAISON SUKOH"],
   },
 
 ]
