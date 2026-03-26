@@ -139,12 +139,13 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
 
   return (
     <div className="relative py-5">
-      <div className="flex items-end">
-        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none pb-1">
+      <div className="flex items-center">
+        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
           {project.id}
         </span>
+        {/* Single mouse-leave on the container to avoid flicker between images */}
         <div
-          className="flex items-end gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex items-center gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           onMouseLeave={() => setHoveredIdx(null)}
         >
           {project.images.map((img, i) => {
@@ -162,9 +163,9 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
                   height: img.h * scale,
                   opacity,
                 }}
-                transition={{ type: "spring", stiffness: 160, damping: 28, mass: 0.8 }}
+                transition={{ type: "spring", stiffness: 140, damping: 26, mass: 1 }}
                 onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
+                // No onMouseLeave here — container handles it, prevents flicker
               >
                 <Image
                   src={img.src}
