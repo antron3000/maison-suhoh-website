@@ -126,87 +126,44 @@ const SCATTERED = [
 type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
-type TaggedImage = typeof ALL_IMAGES[number] & { projId: string }
-
-// Justified row layout: pack images into rows by their aspect ratios
-function buildRows(images: TaggedImage[], targetRowHeight: number, containerWidth: number) {
-  const rows: TaggedImage[][] = []
-  let row: TaggedImage[] = []
-  let rowWidth = 0
-  for (const img of images) {
-    const aspectRatio = img.w / img.h
-    const scaledW = aspectRatio * targetRowHeight
-    if (rowWidth + scaledW > containerWidth && row.length > 0) {
-      rows.push(row)
-      row = []
-      rowWidth = 0
-    }
-    row.push(img)
-    rowWidth += scaledW
-  }
-  if (row.length > 0) rows.push(row)
-  return rows
-}
-
 function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
-  const allImgs: TaggedImage[] = filteredProjects.flatMap(p =>
-    p.images.map(img => ({ ...img, project: p.title, projId: p.id }))
-  )
-  const TARGET_H = 220
-  const CONTAINER_W = typeof window !== "undefined" ? window.innerWidth - 64 : 1200
-  const rows = buildRows(allImgs, TARGET_H, CONTAINER_W)
-
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
   return (
-    <div className="pb-24 bg-background min-h-screen px-8">
-      {rows.map((row, ri) => {
-        const totalAspect = row.reduce((sum, img) => sum + img.w / img.h, 0)
-
-        // Find where each new project starts within this row
-        const labels: { id: string; leftPct: number }[] = []
-        let cumAspect = 0
-        let lastId: string | null = null
-        for (const img of row) {
-          if (img.projId !== lastId) {
-            labels.push({ id: img.projId, leftPct: (cumAspect / totalAspect) * 100 })
-            lastId = img.projId
-          }
-          cumAspect += img.w / img.h
-        }
-
-        return (
-          <div key={ri} className="mb-1">
-            <div className="flex gap-[2px]">
-              {row.map((img, i) => (
-                <div
-                  key={i}
-                  className="relative overflow-hidden bg-muted"
-                  style={{ flex: (img.w / img.h) / totalAspect, minWidth: 0, height: TARGET_H }}
-                >
-                  <Image
-                    src={img.src}
-                    alt={`${img.project} ${i + 1}`}
-                    fill
-                    quality={100}
-                    className="object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                </div>
-              ))}
+    <div className="pb-24 bg-background min-h-screen">
+      {filteredProjects.map((project) => (
+        <div
+          key={project.id}
+          className="relative py-8"
+          onMouseEnter={() => setHoveredProject(project.id)}
+          onMouseLeave={() => setHoveredProject(null)}
+        >
+          <AnimatePresence>
+            {hoveredProject === project.id && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.25 }}
+                className="absolute top-1 left-0 right-0 flex justify-center z-10 pointer-events-none"
+              >
+                <p className="text-[10px] tracking-[0.2em] text-foreground/70">
+                  {project.title.toUpperCase()}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div className="flex items-center gap-2 px-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex-shrink-0 text-[10px] tracking-[0.15em] text-foreground/40 w-6 text-right mr-2 self-end pb-1">
+              {project.id}
             </div>
-            {/* Project number labels below each row */}
-            <div className="relative h-5">
-              {labels.map(label => (
-                <span
-                  key={label.id}
-                  className="absolute text-[10px] tracking-[0.15em] text-foreground/35 mt-1"
-                  style={{ left: `${label.leftPct}%` }}
-                >
-                  {label.id}
-                </span>
-              ))}
-            </div>
+            {project.images.map((img, i) => (
+              <div key={i} className="flex-shrink-0 relative overflow-hidden bg-muted" style={{ width: img.w, height: img.h }}>
+                <Image src={img.src} alt={`${project.title} ${i + 1}`} fill quality={100} className="object-cover transition-transform duration-700 hover:scale-105" />
+              </div>
+            ))}
           </div>
-        )
-      })}
+        </div>
+      ))}
     </div>
   )
 }
