@@ -256,15 +256,10 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 }
 
 // ── VIEW 3: Clean 6-column grid ──
-const MIXED_IMAGES = [
-  ...ALL_IMAGES.filter((_, i) => i % 2 === 0),
-  ...ALL_IMAGES.filter((_, i) => i % 2 !== 0),
-].slice(0, 12)
-
 function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   const [hovered, setHovered] = useState<number | null>(null)
   const [lightbox, setLightbox] = useState<{ src: string; project: string } | null>(null)
-  const mixed = filteredImages.slice(0, 12)
+  const mixed = filteredImages
   return (
     <div className="bg-background pb-24">
       <div className="grid grid-cols-4 gap-0">
