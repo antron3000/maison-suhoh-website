@@ -75,13 +75,13 @@ export default function AboutPage() {
               {/* Bio */}
               <div className="text-[11px] tracking-[0.01em] leading-loose text-foreground/75 w-full space-y-4">
                 <p>
-                  We are Maison Sukoh, a Toronto-based production company working between Barcelona, Accra, and Toronto. Founded in 2026 by Mama Soukoh Brethe alongside director Tessia Yasmine, we came together through a shared instinct to create work that feels honest, lived-in, and deeply human.
+                  WE ARE MAISON SUKOH, A TORONTO BASED MULTIDISCIPLINARY PRODUCTION COMPANY FOUNDED IN 2025 BY MAMA SOUKHO BERETHE. BUILT AS A COLLECTIVE PLATFORM, THE COMPANY CREATES OPPORTUNITIES FOR PEOPLE TO ENGAGE WITH AND WORK WITHIN THE CREATIVE SCENE.
                 </p>
                 <p>
-                  We move between event curation, campaign production, and editorial storytelling, but for us, it has always been about more than the final image or moment. We think about feeling first—how something is experienced, remembered, and carried. Each project becomes a space where different energies are shaped by the people, places, and stories that surround it.
+                  Our work is influenced by the cities we exist in—Barcelona, Accra, Toronto, where we PRODUCE ACROSS SOUND, VISUALS, MEDIA, AND CURATED EVENTS.
                 </p>
                 <p>
-                  Our work is influenced by the rhythm of the cities we exist in—Barcelona, Accra, Toronto—each one leaving its own imprint on how we see and create. At our core, we are interested in connection. In bringing people together, on an international scale.
+                  THE NAME REFLECTS BOTH ORIGIN AND PURPOSE. "MAISON," MEANING HOUSE IN FRENCH, REPRESENTS A SPACE FOR CREATIVES TO COME TOGETHER, WITH DIFFERENT ROOMS SYMBOLIZING ITS VARIOUS DOMAINS. "SUKOH" DERIVES FROM SOUKHO, ROOTED IN MALIAN HERITAGE AND CONNECTED TO THE KEITA LINEAGE.
                 </p>
               </div>
 
