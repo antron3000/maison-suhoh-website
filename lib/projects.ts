@@ -15,7 +15,7 @@ export interface Project {
   title: string
   year: string
   category: string
-  image: string      // thumbnail used on /work
+  image: string           // thumbnail used on /work
   images: ProjectImage[]  // gallery images
 }
 
@@ -45,6 +45,7 @@ export const PROJECTS: Project[] = [
     images: [
       { src: "/images/grwm-01.jpg", w: 120, h: 120 },
       { src: "/images/grwm-02.jpg", w: 90,  h: 120 },
+      { src: "/images/grwm-03.jpg", w: 110, h: 120 },
       { src: "/images/grwm-04.jpg", w: 100, h: 120 },
       { src: "/images/grwm-05.jpg", w: 90,  h: 120 },
       { src: "/images/grwm-06.jpg", w: 130, h: 120 },
@@ -52,6 +53,39 @@ export const PROJECTS: Project[] = [
       { src: "/images/grwm-08.jpg", w: 90,  h: 120 },
       { src: "/images/grwm-09.jpg", w: 90,  h: 120 },
       { src: "/images/grwm-10.jpg", w: 90,  h: 120 },
+    ],
+  },
+  {
+    id: "006",
+    slug: "ghana-food-movement",
+    title: "Ghana Food Movement",
+    year: "2026",
+    category: "EVENT",
+    image: "/images/ghana-01.jpg",
+    images: [
+      { src: "/images/ghana-01.jpg",      w: 130, h: 120 },
+      { src: "/images/ghana-02.jpg",      w: 100, h: 120 },
+      { src: "/images/ghana-03.jpg",      w: 150, h: 120 },
+      { src: "/images/ghana-04.jpg",      w: 110, h: 120 },
+      { src: "/images/ghana-05.jpg",      w: 130, h: 120 },
+      { src: "/images/ghana-food-01.jpg", w: 120, h: 120 },
+      { src: "/images/ghana-food-02.jpg", w: 100, h: 120 },
+      { src: "/images/ghana-food-03.jpg", w: 140, h: 120 },
+      { src: "/images/ghana-food-04.jpg", w: 110, h: 120 },
+      { src: "/images/ghana-food-05.jpg", w: 130, h: 120 },
+    ],
+  },
+  {
+    id: "007",
+    slug: "push-runway-show",
+    title: "Push Runway Show",
+    year: "2026",
+    category: "EVENT",
+    image: "/images/push-03.jpg",
+    images: [
+      { src: "/images/push-01.jpg", w: 110, h: 120 },
+      { src: "/images/push-02.jpg", w: 130, h: 120 },
+      { src: "/images/push-03.jpg", w: 120, h: 120 },
     ],
   },
   {
@@ -90,6 +124,23 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: "008",
+    slug: "noir-campaign",
+    title: "Noir Campaign",
+    year: "2025",
+    category: "CAMPAIGN",
+    image: "/images/noir-01.jpg",
+    images: [
+      { src: "/images/noir-01.jpg", w: 120, h: 130 },
+      { src: "/images/noir-02.jpg", w: 100, h: 130 },
+      { src: "/images/noir-03.jpg", w: 140, h: 130 },
+      { src: "/images/noir-04.jpg", w: 110, h: 130 },
+      { src: "/images/noir-05.jpg", w: 130, h: 130 },
+      { src: "/images/noir-06.jpg", w: 100, h: 130 },
+      { src: "/images/noir-07.jpg", w: 120, h: 130 },
+    ],
+  },
+  {
     id: "005",
     slug: "nora-pop-photography",
     title: "Nora Pop Photography",
@@ -105,21 +156,6 @@ export const PROJECTS: Project[] = [
       { src: "/images/brand-06.jpg", w: 120, h: 125 },
     ],
   },
-  {
-    id: "006",
-    slug: "ghana-food-movement",
-    title: "Ghana Food Movement",
-    year: "2026",
-    category: "EVENT",
-    image: "/images/ghana-01.jpg",
-    images: [
-      { src: "/images/ghana-01.jpg", w: 130, h: 120 },
-      { src: "/images/ghana-02.jpg", w: 100, h: 120 },
-      { src: "/images/ghana-03.jpg", w: 150, h: 120 },
-      { src: "/images/ghana-04.jpg", w: 110, h: 120 },
-      { src: "/images/ghana-05.jpg", w: 130, h: 120 },
-    ],
-  },
 ]
 
 // Sorted newest → oldest (used by /work page)
@@ -130,13 +166,13 @@ export const PROJECTS_SORTED = [...PROJECTS].sort(
 // Tag → project title mapping (used by /gallery page)
 export const TAG_FILTER: Record<string, string[]> = {
   "ALL": [],
-  "EDITORIAL": ["Revival in Ghana", "#GRWM"],
-  "CAMPAIGN": ["Darkos", "#GRWM", "Revival in Ghana", "For The Geng Only"],
-  "FASHION PHOTOGRAPHY": ["Darkos", "For The Geng Only", "#GRWM"],
+  "EDITORIAL": ["Revival in Ghana", "#GRWM", "Noir Campaign"],
+  "CAMPAIGN": ["Darkos", "#GRWM", "Revival in Ghana", "For The Geng Only", "Noir Campaign"],
+  "FASHION PHOTOGRAPHY": ["Darkos", "For The Geng Only", "#GRWM", "Noir Campaign"],
   "FILM": ["For The Geng Only"],
-  "EVENTS": ["Ghana Food Movement", "For The Geng Only"],
+  "EVENTS": ["Ghana Food Movement", "Push Runway Show", "For The Geng Only"],
   "CREATIVE DIRECTION": ["Darkos", "For The Geng Only", "Nora Pop Photography", "#GRWM"],
   "BRAND": ["Nora Pop Photography"],
-  "SS26": ["Revival in Ghana", "#GRWM"],
-  "FW26": ["Darkos"],
+  "SS26": ["Revival in Ghana", "#GRWM", "Push Runway Show"],
+  "FW26": ["Darkos", "Noir Campaign"],
 }
