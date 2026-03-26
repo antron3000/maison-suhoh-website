@@ -42,7 +42,7 @@ const EVENTS = [
       { label: "SEASON", value: "SS26" },
     ],
     services: ["PHOTOGRAPHY", "VIDEOGRAPHY", "POST-PRODUCTION"],
-    clients: ["DECENTRALISE", "MAISON SUKOH"],
+    clients: ["DECENTRALISE GENTLEMAN", "MAISON SUKOH"],
   },
 
 ]
