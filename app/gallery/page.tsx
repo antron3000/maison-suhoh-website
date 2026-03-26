@@ -262,16 +262,17 @@ function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   const mixed = filteredImages
   return (
     <div className="bg-background pb-24">
-      <div className="grid grid-cols-4 gap-0">
+      <div className="flex flex-row overflow-x-auto gap-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {mixed.map((item, i) => (
           <div
             key={i}
-            className="relative cursor-pointer bg-white p-2 flex flex-col"
+            className="relative cursor-pointer flex-shrink-0"
+            style={{ width: 220, height: 300 }}
             onMouseEnter={() => setHovered(i)}
             onMouseLeave={() => setHovered(null)}
             onClick={() => setLightbox({ src: item.src, project: item.project })}
           >
-            <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/4" }}>
+            <div className="relative w-full h-full overflow-hidden">
               <Image src={item.src} alt={`Photo ${i + 1}`} fill quality={100} className="object-cover transition-transform duration-500 hover:scale-105" />
               {hovered === i && (
                 <motion.div
@@ -283,9 +284,6 @@ function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
                 </motion.div>
               )}
             </div>
-            <p className="text-[9px] tracking-[0.12em] text-foreground/40 mt-1 text-center">
-              {String(i + 1).padStart(2, "0")}
-            </p>
           </div>
         ))}
       </div>
