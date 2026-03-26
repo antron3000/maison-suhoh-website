@@ -128,7 +128,7 @@ type ViewMode = "view1" | "view2" | "view3"
 // ── VIEW 1: Horizontal strips per project ──
 // ── Fisheye film strip row ──
 // Index-distance based scale → animates actual width/height so layout pushes apart (no overlap)
-const SCALE_BY_DIST: Record<number, number> = { 0: 1.75, 1: 1.28, 2: 1.08 }
+const SCALE_BY_DIST: Record<number, number> = { 0: 1.4, 1: 1.15, 2: 1.05 }
 
 function fisheyeScale(dist: number): number {
   return SCALE_BY_DIST[dist] ?? 1
@@ -162,7 +162,7 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
                   height: img.h * scale,
                   opacity,
                 }}
-                transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ type: "spring", stiffness: 160, damping: 28, mass: 0.8 }}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
               >
