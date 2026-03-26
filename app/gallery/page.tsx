@@ -194,7 +194,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   )
 
   return (
-    <div className="bg-background pb-32 px-4 md:px-8 space-y-6 md:space-y-10 max-w-5xl mx-auto">
+    <div className="bg-background pb-32 px-4 md:px-6 space-y-6 md:space-y-10 max-w-7xl mx-auto">
 
       {/* 1 — Hero: smaller, right-aligned */}
       {imgs[0] && <HeroImage src={imgs[0].src} />}
