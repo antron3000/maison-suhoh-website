@@ -61,7 +61,7 @@ export default function WorkPage() {
       <PageTransition className="px-4 md:px-8 py-16 min-h-screen relative flex flex-col justify-center">
         {/* Fixed image reveal on hover — left side, desktop only */}
         <div className="fixed top-1/2 -translate-y-1/2 left-16 w-[400px] aspect-[3/4] pointer-events-none hidden md:block z-0">
-          {PROJECTS.map((project) => (
+          {[...PROJECTS].sort((a, b) => Number(b.year) - Number(a.year)).map((project) => (
             <div
               key={project.id}
               className={`absolute inset-0 w-full h-full transition-all duration-700 ease-out ${
@@ -83,7 +83,7 @@ export default function WorkPage() {
         {/* Project list — aligned to right */}
         <div className="max-w-2xl relative z-10 w-full ml-auto md:mr-16">
           <div className="border-t-2 border-foreground" />
-          {PROJECTS.map((project) => (
+          {[...PROJECTS].sort((a, b) => Number(b.year) - Number(a.year)).map((project) => (
             <Link href={`/work/${project.slug}`} key={project.id}>
               <motion.div
                 className="group flex flex-col sm:flex-row sm:items-center justify-between py-1 md:py-1 border-b-2 border-foreground cursor-pointer"
