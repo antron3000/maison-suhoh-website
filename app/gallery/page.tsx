@@ -1,7 +1,7 @@
 "use client"
 
 import Footer from "@/components/footer"
-import { useState, useMemo, useRef, useCallback } from "react"
+import { useState, useMemo } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
@@ -127,25 +127,15 @@ type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
 // ── Fisheye film strip row ──
-// Continuous cursor-X tracking with Gaussian falloff → smooth rolling wave
-const FISHEYE_SIGMA = 120   // px — spread of the lens bulge
-const FISHEYE_PEAK = 1.38   // max scale at cursor centre
+// Index-distance based scale → animates actual width/height so layout pushes apart (no overlap)
+const SCALE_BY_DIST: Record<number, number> = { 0: 1.4, 1: 1.15, 2: 1.05 }
 
-function gaussianW(distPx: number): number {
-  return 1 + (FISHEYE_PEAK - 1) * Math.exp(-0.5 * (distPx / FISHEYE_SIGMA) ** 2)
+function fisheyeScale(dist: number): number {
+  return SCALE_BY_DIST[dist] ?? 1
 }
 
 function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
-  const [cursorX, setCursorX] = useState<number | null>(null)
-  const imgRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    setCursorX(e.clientX)
-  }, [])
-
-  const handleMouseLeave = useCallback(() => {
-    setCursorX(null)
-  }, [])
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   return (
     <div className="relative py-5">
@@ -155,33 +145,26 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
         </span>
         <div
           className="flex items-end gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          onMouseLeave={() => setHoveredIdx(null)}
         >
           {project.images.map((img, i) => {
-            // Compute dist from cursor to this image's centre in real time
-            let scale = 1
-            let opacity = 1
-            if (cursorX !== null && imgRefs.current[i]) {
-              const rect = imgRefs.current[i]!.getBoundingClientRect()
-              const cx = rect.left + rect.width / 2
-              const dist = Math.abs(cursorX - cx)
-              scale = gaussianW(dist)
-              // Opacity: full at centre, gentle fade outward
-              opacity = 0.35 + 0.65 * Math.exp(-0.5 * (dist / (FISHEYE_SIGMA * 1.8)) ** 2)
-            }
+            const dist = hoveredIdx === null ? Infinity : Math.abs(i - hoveredIdx)
+            const scale = fisheyeScale(dist)
+            const active = hoveredIdx !== null
+            const opacity = !active ? 1 : dist === 0 ? 1 : dist === 1 ? 0.8 : dist === 2 ? 0.6 : 0.35
 
             return (
               <motion.div
                 key={i}
-                ref={el => { imgRefs.current[i] = el }}
                 className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
                 animate={{
                   width: img.w * scale,
                   height: img.h * scale,
                   opacity,
                 }}
-                transition={{ type: "spring", stiffness: 200, damping: 32, mass: 0.6 }}
+                transition={{ type: "spring", stiffness: 160, damping: 28, mass: 0.8 }}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
               >
                 <Image
                   src={img.src}
