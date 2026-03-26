@@ -133,26 +133,11 @@ function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
       {filteredProjects.map((project) => (
         <div
           key={project.id}
-          className="relative py-8"
+          className="relative"
           onMouseEnter={() => setHoveredProject(project.id)}
           onMouseLeave={() => setHoveredProject(null)}
         >
-          <AnimatePresence>
-            {hoveredProject === project.id && (
-              <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.25 }}
-                className="absolute top-1 left-0 right-0 flex justify-center z-10 pointer-events-none"
-              >
-                <p className="text-[10px] tracking-[0.2em] text-foreground/70">
-                  {project.title.toUpperCase()}
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <div className="flex items-center gap-2 px-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="flex items-stretch gap-0 px-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <div className="flex-shrink-0 text-[10px] tracking-[0.15em] text-foreground/40 w-6 text-right mr-2 self-end pb-1">
               {project.id}
             </div>
