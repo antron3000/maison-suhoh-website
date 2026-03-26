@@ -15,8 +15,8 @@ const EVENTS = [
     date: "MAY 8, 2026",
     location: "BEVY SPACE, TORONTO",
     category: "FW SS26",
-    image: "/images/push-01.jpg",
-    hero: "/images/push-01.jpg",
+    image: "/images/push-02.jpg",
+    hero: "/images/push-02.jpg",
     stats: [
       { label: "GUESTS", value: "" },
       { label: "YEAR", value: "2026" },
