@@ -318,7 +318,7 @@ function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
         {mixed.map((item, i) => (
           <div
             key={i}
-            className="relative cursor-pointer bg-white p-1 flex flex-col"
+            className="relative cursor-pointer bg-white p-2 flex flex-col"
             onMouseEnter={() => setHovered(i)}
             onMouseLeave={() => setHovered(null)}
             onClick={() => setLightbox({ src: item.src, project: item.project })}
