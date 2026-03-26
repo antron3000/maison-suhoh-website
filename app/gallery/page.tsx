@@ -126,43 +126,60 @@ const SCATTERED = [
 type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
-function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
+// ── Film strip row ──
+function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+
   return (
-    <div className="pb-24 bg-background min-h-screen">
-      {filteredProjects.map((project) => (
+    <div className="relative group py-6 border-t border-foreground/8">
+      {/* Row label */}
+      <div className="flex items-start">
+        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pt-[6px] pl-8 select-none">
+          {project.id}
+        </span>
+        {/* Scrollable strip */}
         <div
-          key={project.id}
-          className="relative py-8"
-          onMouseEnter={() => setHoveredProject(project.id)}
-          onMouseLeave={() => setHoveredProject(null)}
+          className="flex items-end gap-[6px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab active:cursor-grabbing"
+          onMouseLeave={() => setHoveredIdx(null)}
         >
-          <AnimatePresence>
-            {hoveredProject === project.id && (
+          {project.images.map((img, i) => {
+            const isHovered = hoveredIdx === i
+            const isNear = hoveredIdx !== null && Math.abs(hoveredIdx - i) === 1
+            const scale = isHovered ? 1.18 : isNear ? 1.06 : 1
+            const opacity = hoveredIdx === null ? 1 : isHovered ? 1 : isNear ? 0.75 : 0.45
+            const h = isHovered ? img.h * 1.18 : img.h
+
+            return (
               <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.25 }}
-                className="absolute top-1 left-0 right-0 flex justify-center z-10 pointer-events-none"
+                key={i}
+                className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
+                style={{ width: img.w, height: h }}
+                animate={{ scale, opacity }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
               >
-                <p className="text-[10px] tracking-[0.2em] text-foreground/70">
-                  {project.title.toUpperCase()}
-                </p>
+                <Image
+                  src={img.src}
+                  alt={`${project.title} ${i + 1}`}
+                  fill
+                  quality={100}
+                  className="object-cover"
+                />
               </motion.div>
-            )}
-          </AnimatePresence>
-          <div className="flex items-center gap-2 px-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <div className="flex-shrink-0 text-[10px] tracking-[0.15em] text-foreground/40 w-6 text-right mr-2 self-end pb-1">
-              {project.id}
-            </div>
-            {project.images.map((img, i) => (
-              <div key={i} className="flex-shrink-0 relative overflow-hidden bg-muted" style={{ width: img.w, height: img.h }}>
-                <Image src={img.src} alt={`${project.title} ${i + 1}`} fill quality={100} className="object-cover transition-transform duration-700 hover:scale-105" />
-              </div>
-            ))}
-          </div>
+            )
+          })}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
+  return (
+    <div className="pb-32 bg-background min-h-screen">
+      {filteredProjects.map((project) => (
+        <FilmStripRow key={project.id} project={project} />
       ))}
     </div>
   )
