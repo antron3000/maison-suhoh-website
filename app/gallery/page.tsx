@@ -163,7 +163,7 @@ function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
   }
 
   return (
-    <div className="relative py-5 border-t border-foreground/8">
+    <div className="relative py-5">
       <div className="flex items-center">
         <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
           {project.id}
