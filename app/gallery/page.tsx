@@ -307,6 +307,7 @@ const MIXED_IMAGES = [
 
 function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   const [hovered, setHovered] = useState<number | null>(null)
+  const [lightbox, setLightbox] = useState<{ src: string; project: string } | null>(null)
   const mixed = [
     ...filteredImages.filter((_, i) => i % 2 === 0),
     ...filteredImages.filter((_, i) => i % 2 !== 0),
@@ -320,6 +321,7 @@ function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
             className="relative cursor-pointer bg-white p-1 flex flex-col"
             onMouseEnter={() => setHovered(i)}
             onMouseLeave={() => setHovered(null)}
+            onClick={() => setLightbox({ src: item.src, project: item.project })}
           >
             <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/4" }}>
               <Image src={item.src} alt={`Photo ${i + 1}`} fill quality={100} className="object-cover transition-transform duration-500 hover:scale-105" />
@@ -339,6 +341,42 @@ function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
           </div>
         ))}
       </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+            onClick={() => setLightbox(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative max-w-4xl max-h-[90vh] w-full mx-8"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="relative w-full" style={{ aspectRatio: "3/4", maxHeight: "85vh" }}>
+                <Image src={lightbox.src} alt={lightbox.project} fill quality={100} className="object-contain" />
+              </div>
+              <p className="text-center text-[10px] tracking-[0.2em] text-white/50 mt-3">
+                {lightbox.project.toUpperCase()}
+              </p>
+              <button
+                onClick={() => setLightbox(null)}
+                className="absolute -top-4 -right-4 w-8 h-8 flex items-center justify-center text-white/60 hover:text-white text-xl leading-none"
+              >
+                ×
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
