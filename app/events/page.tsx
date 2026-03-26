@@ -17,6 +17,7 @@ const EVENTS = [
     category: "FW SS26",
     image: "/images/push-02.jpg",
     hero: "/images/push-02.jpg",
+    heroFit: "contain" as const,
     stats: [
       { label: "GUESTS", value: "" },
       { label: "YEAR", value: "2026" },
@@ -34,6 +35,7 @@ const EVENTS = [
     category: "BRAND EVENT",
     image: "/images/lumiere-01.jpg",
     hero: "/images/lumiere-04.jpg",
+    heroFit: "cover" as const,
     stats: [
       { label: "GUESTS", value: "120" },
       { label: "YEAR", value: "2026" },
@@ -157,8 +159,8 @@ export default function EventsPage() {
             </div>
 
             {/* ── RIGHT: Hero image ── */}
-            <div className="w-[47%] relative overflow-hidden bg-muted">
-              <Image src={event.hero} alt={event.title} fill quality={100} className="object-cover" />
+            <div className="w-[47%] relative overflow-hidden bg-black">
+              <Image src={event.hero} alt={event.title} fill quality={100} className={event.heroFit === "contain" ? "object-contain" : "object-cover"} />
 
               {/* Large watermark number */}
               <div className="absolute bottom-8 left-8 z-10">
