@@ -31,7 +31,7 @@ const PROJECTS = [
     title: "Ghana Food Movement",
     year: "2026",
     category: "EVENT",
-    image: "/images/lumiere-01.jpg",
+    image: "/images/ghana-01.jpg",
   },
   {
     id: "003",

@@ -7,10 +7,11 @@ import { motion } from "framer-motion"
 import TopBar from "@/components/top-bar"
 
 const IMAGES = [
-  "/images/lumiere-01.jpg",
-  "/images/lumiere-02.jpg",
-  "/images/lumiere-03.jpg",
-  "/images/lumiere-04.jpg",
+  "/images/ghana-01.jpg",
+  "/images/ghana-02.jpg",
+  "/images/ghana-03.jpg",
+  "/images/ghana-04.jpg",
+  "/images/ghana-05.jpg",
 ]
 
 export default function GhanaFoodMovementPage() {
