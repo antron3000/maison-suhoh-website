@@ -33,8 +33,8 @@ const EVENTS = [
     date: "APR 20, 2026",
     location: "CASA TELUM, TORONTO",
     category: "BRAND EVENT",
-    image: "/images/lumiere-01.jpg",
-    hero: "/images/lumiere-04.jpg",
+    image: "/images/decentralise-01.jpg",
+    hero: "/images/decentralise-01.jpg",
     heroFit: "cover" as const,
     stats: [
       { label: "GUESTS", value: "120" },
