@@ -37,20 +37,20 @@ const TEAM = [
 
 const EDUCATION = [
   {
-    year: "2024–2025",
-    title: "CREATIVE DIRECTION,\nMAISON SUKOH,\nTORONTO",
+    year: "",
+    title: "SOUND",
   },
   {
-    year: "2024–2025",
-    title: "BRAND STRATEGY,\nINDEPENDENT STUDY &\nMENTORSHIP",
+    year: "",
+    title: "VISUALS",
   },
   {
-    year: "2024",
-    title: "PHOTOGRAPHY INTENSIVE,\nSTUDIO PRACTICE,\nTORONTO",
+    year: "",
+    title: "MEDIA",
   },
   {
-    year: "2023",
-    title: "VISUAL DESIGN,\nDIGITAL & PRINT\nSYSTEMS",
+    year: "",
+    title: "CURATED\nEVENTS",
   },
 ]
 
@@ -102,7 +102,7 @@ export default function AboutPage() {
 
               {/* Recognition */}
               <div className="mt-[300px]">
-                <h2 className="text-2xl tracking-[-0.04em] text-foreground mb-8">RECOGNITION</h2>
+                <h2 className="text-2xl tracking-[-0.04em] text-foreground mb-8">PLATFORMS</h2>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-6">
                   {EDUCATION.map((e, i) => (
                     <div key={i} className="border-t border-foreground/10 pt-4">
