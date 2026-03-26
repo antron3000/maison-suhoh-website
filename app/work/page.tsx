@@ -22,8 +22,16 @@ const PROJECTS = [
     slug: "grwm",
     title: "#GRWM",
     year: "2026",
-    category: "EDITORIAL",
+    category: "CAMPAIGN",
     image: "/images/grwm-01.jpg",
+  },
+  {
+    id: "006",
+    slug: "ghana-food-movement",
+    title: "Ghana Food Movement",
+    year: "2026",
+    category: "EVENT",
+    image: "/images/lumiere-01.jpg",
   },
   {
     id: "003",
