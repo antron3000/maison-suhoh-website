@@ -157,7 +157,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   )
 
   return (
-    <div className="bg-background pb-32 px-4 md:px-6 space-y-6 md:space-y-10 max-w-7xl mx-auto">
+    <div className="bg-background pb-32 px-4 md:px-6 space-y-16 md:space-y-24 max-w-7xl mx-auto">
 
       {/* 1 — Hero: smaller, right-aligned */}
       {imgs[0] && <HeroImage src={imgs[0].src} />}
@@ -171,7 +171,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 3 — Two equal side by side */}
       {imgs[2] && imgs[3] && (
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <Img src={imgs[2].src} aspect="18/23" className="flex-1" />
           <Img src={imgs[3].src} aspect="18/23" className="flex-1" />
         </div>
@@ -179,7 +179,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 4 — Two equal side by side */}
       {imgs[4] && imgs[5] && (
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <Img src={imgs[4].src} aspect="4/5" className="flex-1" />
           <Img src={imgs[5].src} aspect="4/5" className="flex-1" />
         </div>
@@ -194,7 +194,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 6 — Asymmetric: small left, large right */}
       {imgs[7] && imgs[8] && (
-        <div className="flex gap-4 items-end">
+        <div className="flex gap-8 items-end">
           <Img src={imgs[7].src} aspect="16/22" className="w-1/3" />
           <Img src={imgs[8].src} aspect="27/34" className="flex-1" />
         </div>
@@ -212,7 +212,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 9 — Two equal */}
       {imgs[11] && imgs[12] && (
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <Img src={imgs[11].src} aspect="21/26" className="flex-1" />
           <Img src={imgs[12].src} aspect="21/26" className="flex-1" />
         </div>
@@ -220,7 +220,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 10 — Two equal */}
       {imgs[13] && imgs[14] && (
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <Img src={imgs[13].src} aspect="4/5" className="flex-1" />
           <Img src={imgs[14].src} aspect="4/5" className="flex-1" />
         </div>
@@ -231,7 +231,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 12 — Asymmetric: large left, small right */}
       {imgs[16] && imgs[17] && (
-        <div className="flex gap-4 items-end">
+        <div className="flex gap-8 items-end">
           <Img src={imgs[16].src} aspect="27/34" className="flex-1" />
           <Img src={imgs[17].src} aspect="16/22" className="w-1/3" />
         </div>
@@ -246,7 +246,7 @@ function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
 
       {/* 14 — Two equal */}
       {imgs[19] && imgs[20] && (
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <Img src={imgs[19].src} aspect="4/5" className="flex-1" />
           <Img src={imgs[20].src} aspect="4/5" className="flex-1" />
         </div>
