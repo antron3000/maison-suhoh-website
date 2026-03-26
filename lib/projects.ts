@@ -28,7 +28,6 @@ export const PROJECTS: Project[] = [
     category: "CAMPAIGN",
     image: "/images/darkos-02.jpg",
     images: [
-      { src: "/images/darkos-01.jpg", w: 120, h: 120 },
       { src: "/images/darkos-02.jpg", w: 90,  h: 120 },
       { src: "/images/darkos-03.jpg", w: 130, h: 120 },
       { src: "/images/darkos-04.jpg", w: 100, h: 120 },
