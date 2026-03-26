@@ -1,7 +1,7 @@
 "use client"
 
 import Footer from "@/components/footer"
-import { useState, useMemo, useRef } from "react"
+import { useState, useMemo } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import TopBar from "@/components/top-bar"
@@ -127,63 +127,44 @@ type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
 // ── Fisheye film strip row ──
-const FISHEYE_RADIUS = 260  // px influence radius
-const MAX_SCALE = 1.9       // peak scale at cursor center
-const MIN_OPACITY = 0.35    // opacity of far images
+// Index-distance based scale → animates actual width/height so layout pushes apart (no overlap)
+const SCALE_BY_DIST: Record<number, number> = { 0: 1.75, 1: 1.28, 2: 1.08 }
 
-function gaussianScale(dist: number): number {
-  if (dist > FISHEYE_RADIUS) return 1
-  // Gaussian falloff: peaks at 1→MAX_SCALE at center, eases to 1 at edge
-  return 1 + (MAX_SCALE - 1) * Math.exp(-0.5 * Math.pow(dist / (FISHEYE_RADIUS * 0.4), 2))
+function fisheyeScale(dist: number): number {
+  return SCALE_BY_DIST[dist] ?? 1
 }
 
 function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
-  const stripRef = useRef<HTMLDivElement>(null)
-  const [cursorX, setCursorX] = useState<number | null>(null)
-  const imgRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setCursorX(e.clientX)
-  }
-
-  const handleMouseLeave = () => {
-    setCursorX(null)
-  }
-
-  // Compute scale & opacity per image based on cursor distance to image center
-  const getTransform = (i: number) => {
-    if (cursorX === null || !imgRefs.current[i]) return { scale: 1, opacity: 1 }
-    const el = imgRefs.current[i]!
-    const rect = el.getBoundingClientRect()
-    const imgCenterX = rect.left + rect.width / 2
-    const dist = Math.abs(cursorX - imgCenterX)
-    const scale = gaussianScale(dist)
-    const opacity = dist > FISHEYE_RADIUS ? MIN_OPACITY : MIN_OPACITY + (1 - MIN_OPACITY) * Math.exp(-0.5 * Math.pow(dist / (FISHEYE_RADIUS * 0.5), 2))
-    return { scale, opacity }
-  }
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   return (
     <div className="relative py-5">
-      <div className="flex items-center">
-        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
+      <div className="flex items-end">
+        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none pb-1">
           {project.id}
         </span>
         <div
-          ref={stripRef}
-          className="flex items-center gap-[6px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          className="flex items-end gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          onMouseLeave={() => setHoveredIdx(null)}
         >
           {project.images.map((img, i) => {
-            const { scale, opacity } = getTransform(i)
+            const dist = hoveredIdx === null ? Infinity : Math.abs(i - hoveredIdx)
+            const scale = fisheyeScale(dist)
+            const active = hoveredIdx !== null
+            const opacity = !active ? 1 : dist === 0 ? 1 : dist === 1 ? 0.8 : dist === 2 ? 0.6 : 0.35
+
             return (
               <motion.div
                 key={i}
-                ref={el => { imgRefs.current[i] = el }}
                 className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
-                style={{ width: img.w, height: img.h, transformOrigin: "center bottom" }}
-                animate={{ scale, opacity }}
-                transition={{ duration: 0.12, ease: "easeOut" }}
+                animate={{
+                  width: img.w * scale,
+                  height: img.h * scale,
+                  opacity,
+                }}
+                transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
               >
                 <Image
                   src={img.src}
