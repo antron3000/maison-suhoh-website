@@ -1,5 +1,6 @@
 "use client"
 
+import Footer from "@/components/footer"
 import { useEffect, useState } from "react"
 import TopBar from "@/components/top-bar"
 
@@ -35,24 +36,9 @@ export default function ContactPage() {
       ),
     },
     { label: "Current Time", value: time },
+    { label: "Phone", value: "(438) 931-4889" },
     {
-      label: "General Enquiries",
-      value: (
-        <a href="mailto:hello@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
-          hello@maisonsukoh.com
-        </a>
-      ),
-    },
-    {
-      label: "New Business",
-      value: (
-        <a href="mailto:tessia.yasmine@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
-          tessia.yasmine@maisonsukoh.com
-        </a>
-      ),
-    },
-    {
-      label: "Creative Direction",
+      label: "Director",
       value: (
         <a href="mailto:tessia.yasmine@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
           tessia.yasmine@maisonsukoh.com
@@ -62,8 +48,8 @@ export default function ContactPage() {
     {
       label: "Founder",
       value: (
-        <a href="mailto:mama.soukoh@gmail.com" className="hover:opacity-60 transition-opacity">
-          mama.soukoh@gmail.com
+        <a href="mailto:mama.soukho@maisonsukoh.com" className="hover:opacity-60 transition-opacity">
+          mama.soukho@maisonsukoh.com
         </a>
       ),
     },
@@ -79,14 +65,7 @@ export default function ContactPage() {
           >
             Instagram
           </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-60 transition-opacity"
-          >
-            LinkedIn
-          </a>
+
         </span>
       ),
     },
@@ -112,6 +91,7 @@ export default function ContactPage() {
           ))}
         </div>
       </main>
+      <Footer />
     </>
   )
 }

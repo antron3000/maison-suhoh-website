@@ -1,5 +1,6 @@
 "use client"
 
+import Footer from "@/components/footer"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -28,7 +29,7 @@ export default function LumiereLaunchPage() {
         <div className="flex items-end justify-between mb-10 max-w-6xl mx-auto">
           <div>
             <p className="text-[10px] tracking-[0.1em] text-foreground/50 mb-1">002</p>
-            <h1 className="text-2xl tracking-[-0.04em]">LUMIÈRE LAUNCH</h1>
+            <h1 className="text-2xl tracking-[-0.04em]">REVIVAL IN GHANA</h1>
           </div>
           <div className="text-right text-[10px] tracking-[0.1em] text-foreground/50">
             <p>ART DIRECTION</p>
@@ -50,7 +51,7 @@ export default function LumiereLaunchPage() {
             >
               <Image
                 src={src}
-                alt={`Lumière Launch ${i + 1}`}
+                alt={`Revival in Ghana ${i + 1}`}
                 fill
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 priority={i < 3}
@@ -67,6 +68,7 @@ export default function LumiereLaunchPage() {
         </div>
 
       </main>
+      <Footer />
     </>
   )
 }

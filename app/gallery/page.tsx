@@ -1,12 +1,43 @@
 "use client"
 
+import Footer from "@/components/footer"
 import { useState, useRef, useCallback } from "react"
 import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import TopBar from "@/components/top-bar"
 import { PageTransition } from "@/components/PageTransition"
 
+// Tag → project title mapping
+const TAG_FILTER: Record<string, string[]> = {
+  "ALL": [],
+  "EDITORIAL": ["Noir Campaign", "Revival in Ghana", "#GRWM"],
+  "CAMPAIGN": ["Revival in Ghana", "Nora Pop Photography"],
+  "FASHION PHOTOGRAPHY": ["Noir Campaign", "For The Geng Only", "#GRWM"],
+  "FILM": ["For The Geng Only"],
+  "EVENTS": ["Ghana Food Movement", "For The Geng Only", "#GRWM"],
+  "CREATIVE DIRECTION": ["Noir Campaign", "For The Geng Only", "Nora Pop Photography", "#GRWM"],
+  "BRAND": ["Nora Pop Photography"],
+  "SS26": ["Revival in Ghana", "#GRWM"],
+  "FW26": ["Noir Campaign"],
+}
+
 const PROJECTS = [
+  {
+    id: "00",
+    title: "#GRWM",
+    images: [
+      { src: "/images/grwm-01.jpg", w: 120, h: 120 },
+      { src: "/images/grwm-02.jpg", w: 90,  h: 120 },
+      { src: "/images/grwm-03.jpg", w: 140, h: 120 },
+      { src: "/images/grwm-04.jpg", w: 100, h: 120 },
+      { src: "/images/grwm-05.jpg", w: 90,  h: 120 },
+      { src: "/images/grwm-06.jpg", w: 130, h: 120 },
+      { src: "/images/grwm-07.jpg", w: 90,  h: 120 },
+      { src: "/images/grwm-08.jpg", w: 90,  h: 120 },
+      { src: "/images/grwm-09.jpg", w: 90,  h: 120 },
+      { src: "/images/grwm-10.jpg", w: 90,  h: 120 },
+    ],
+  },
   {
     id: "01",
     title: "Noir Campaign",
@@ -24,7 +55,7 @@ const PROJECTS = [
   },
   {
     id: "02",
-    title: "Lumière Launch",
+    title: "Revival in Ghana",
     images: [
       { src: "/images/lumiere-01.jpg", w: 100, h: 130 },
       { src: "/images/lumiere-02.jpg", w: 100, h: 130 },
@@ -40,7 +71,7 @@ const PROJECTS = [
   },
   {
     id: "03",
-    title: "Séquoia Dinner",
+    title: "For The Geng Only",
     images: [
       { src: "/images/photo-03.jpg", w: 130, h: 115 },
       { src: "/images/photo-01.jpg", w: 80,  h: 115 },
@@ -54,7 +85,7 @@ const PROJECTS = [
   },
   {
     id: "04",
-    title: "Brand Story — Clé",
+    title: "Nora Pop Photography",
     images: [
       { src: "/images/brand-01.jpg", w: 160, h: 125 },
       { src: "/images/brand-02.jpg", w: 100, h: 125 },
@@ -85,11 +116,11 @@ const SCATTERED = [
 type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
-function View1() {
+function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null)
   return (
     <div className="pb-24 bg-background min-h-screen">
-      {PROJECTS.map((project) => (
+      {filteredProjects.map((project) => (
         <div
           key={project.id}
           className="relative py-8"
@@ -117,7 +148,7 @@ function View1() {
             </div>
             {project.images.map((img, i) => (
               <div key={i} className="flex-shrink-0 relative overflow-hidden bg-muted" style={{ width: img.w, height: img.h }}>
-                <Image src={img.src} alt={`${project.title} ${i + 1}`} fill className="object-cover transition-transform duration-700 hover:scale-105" />
+                <Image src={img.src} alt={`${project.title} ${i + 1}`} fill quality={100} className="object-cover transition-transform duration-700 hover:scale-105" />
               </div>
             ))}
           </div>
@@ -128,8 +159,32 @@ function View1() {
 }
 
 // ── VIEW 2: BOWTE editorial scroll layout ──
-function View2() {
-  const imgs = ALL_IMAGES
+function ParallaxHero({ src }: { src: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const y = useTransform(scrollYProgress, [0, 1], ["-40%", "40%"])
+
+  return (
+    <div className="flex justify-end">
+      <motion.div
+        ref={ref}
+        className="relative overflow-hidden bg-muted w-[55%]"
+        style={{ aspectRatio: "4/5" }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.div className="absolute inset-[-40%_0] " style={{ y }}>
+          <Image src={src} alt="" fill quality={100} className="object-cover" />
+        </motion.div>
+      </motion.div>
+    </div>
+  )
+}
+
+function View2({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
+  const imgs = filteredImages
 
   // Helper component for a single image block
   const Img = ({ src, aspect, className }: { src: string; aspect: string; className?: string }) => (
@@ -141,15 +196,15 @@ function View2() {
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
     >
-      <Image src={src} alt="" fill className="object-cover transition-transform duration-700 hover:scale-105" />
+      <Image src={src} alt="" fill quality={100} className="object-cover transition-transform duration-700 hover:scale-105" />
     </motion.div>
   )
 
   return (
     <div className="bg-background pb-32 px-4 md:px-8 space-y-6 md:space-y-10 max-w-5xl mx-auto">
 
-      {/* 1 — Hero full width */}
-      {imgs[0] && <Img src={imgs[0].src} aspect="4/5" className="w-full" />}
+      {/* 1 — Hero: smaller, right-aligned, parallax */}
+      {imgs[0] && <ParallaxHero src={imgs[0].src} />}
 
       {/* 2 — Single centered ~60% */}
       {imgs[1] && (
@@ -250,12 +305,16 @@ const MIXED_IMAGES = [
   ...ALL_IMAGES.filter((_, i) => i % 2 !== 0),
 ].slice(0, 12)
 
-function View3() {
+function View3({ filteredImages }: { filteredImages: typeof ALL_IMAGES }) {
   const [hovered, setHovered] = useState<number | null>(null)
+  const mixed = [
+    ...filteredImages.filter((_, i) => i % 2 === 0),
+    ...filteredImages.filter((_, i) => i % 2 !== 0),
+  ].slice(0, 12)
   return (
     <div className="bg-background pb-24">
-      <div className="grid grid-cols-6 gap-0">
-        {MIXED_IMAGES.map((item, i) => (
+      <div className="grid grid-cols-4 gap-0">
+        {mixed.map((item, i) => (
           <div
             key={i}
             className="relative cursor-pointer bg-white p-3 flex flex-col"
@@ -263,7 +322,7 @@ function View3() {
             onMouseLeave={() => setHovered(null)}
           >
             <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/4" }}>
-              <Image src={item.src} alt={`Photo ${i + 1}`} fill className="object-cover transition-transform duration-500 hover:scale-105" />
+              <Image src={item.src} alt={`Photo ${i + 1}`} fill quality={100} className="object-cover transition-transform duration-500 hover:scale-105" />
               {hovered === i && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -284,15 +343,53 @@ function View3() {
   )
 }
 
+const TAGS = [
+  "ALL", "EDITORIAL", "CAMPAIGN", "FASHION PHOTOGRAPHY", "FILM", "EVENTS",
+]
+
 export default function GalleryPage() {
   const [view, setView] = useState<ViewMode>("view1")
+  const [activeTag, setActiveTag] = useState("ALL")
+
+  const filteredProjects = activeTag === "ALL"
+    ? PROJECTS
+    : PROJECTS.filter(p => TAG_FILTER[activeTag]?.includes(p.title))
+
+  const filteredImages = filteredProjects.flatMap(p => p.images.map(img => ({ ...img, project: p.title })))
 
   return (
     <>
       <TopBar />
 
+      {/* Info header block */}
+      <div className="pt-[56px] px-8 md:px-14 pb-6">
+        <div className="flex items-start gap-6 pt-8">
+          {/* Index number */}
+          <span className="text-[64px] font-bold leading-none text-foreground/15 select-none shrink-0 mt-1">1</span>
+          {/* Title + tags */}
+          <div className="flex flex-col gap-3">
+            <h1 className="text-[52px] md:text-[64px] font-bold leading-[0.92] tracking-[-0.03em]">
+              Gallery
+            </h1>
+            <p className="text-[11px] tracking-[0.08em] leading-relaxed flex flex-wrap gap-x-0">
+              {TAGS.map((tag, i) => (
+                <span key={tag}>
+                  <button
+                    onClick={() => setActiveTag(tag)}
+                    className={`transition-all duration-150 ${activeTag === tag ? "text-foreground underline underline-offset-2" : "text-foreground/40 hover:text-foreground/80 active:text-foreground"}`}
+                  >
+                    {tag}
+                  </button>
+                  {i < TAGS.length - 1 && <span className="text-foreground/25">,&nbsp;</span>}
+                </span>
+              ))}
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Sub-nav */}
-      <div className="fixed top-14 left-0 right-0 z-30 bg-background">
+      <div className="sticky top-[56px] left-0 right-0 z-30 bg-background">
         <div className="flex items-center justify-center gap-10 py-2">
           {(["view1", "view2", "view3"] as ViewMode[]).map((v, i) => (
             <button
@@ -310,8 +407,8 @@ export default function GalleryPage() {
         </div>
       </div>
 
-      {/* Content — offset for both top bars */}
-      <div className="pt-40">
+      {/* Content */}
+      <div className="pt-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={view}
@@ -320,12 +417,13 @@ export default function GalleryPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {view === "view1" && <View3 />}
-            {view === "view2" && <View2 />}
-            {view === "view3" && <View1 />}
+            {view === "view1" && <View3 filteredImages={filteredImages} />}
+            {view === "view2" && <View2 filteredImages={filteredImages} />}
+            {view === "view3" && <View1 filteredProjects={filteredProjects} />}
           </motion.div>
         </AnimatePresence>
       </div>
+      <Footer />
     </>
   )
 }

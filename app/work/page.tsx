@@ -1,5 +1,6 @@
 "use client"
 
+import Footer from "@/components/footer"
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -10,39 +11,45 @@ import TopBar from "@/components/top-bar"
 const PROJECTS = [
   {
     id: "001",
-    slug: "noir-campaign",
-    title: "Noir Campaign",
+    slug: "darkos",
+    title: "Darkos",
     year: "2026",
-    image: "/images/photo-01.jpg",
+    category: "EDITORIAL",
+    image: "/images/darkos-02.jpg",
   },
   {
     id: "002",
-    slug: "lumiere-launch",
-    title: "Lumière Launch",
-    year: "2025",
-    image: "/images/lumiere-01.jpg",
+    slug: "grwm",
+    title: "#GRWM",
+    year: "2026",
+    category: "EDITORIAL",
+    image: "/images/grwm-01.jpg",
   },
   {
     id: "003",
-    slug: "sequoia-dinner",
-    title: "Séquoia Dinner",
+    slug: "revival-in-ghana",
+    title: "Revival in Ghana",
     year: "2025",
-    image: "/images/photo-03.jpg",
+    category: "CAMPAIGN",
+    image: "/images/lumiere-08.jpg",
   },
   {
     id: "004",
-    slug: "brand-story-cle",
-    title: "Brand Story — Clé",
-    year: "2024",
-    image: "/images/brand-01.jpg",
+    slug: "for-the-geng-only",
+    title: "For The Geng Only",
+    year: "2025",
+    category: "EVENT",
+    image: "/images/ftg-01.jpg",
   },
   {
     id: "005",
-    slug: "rooftop-activation",
-    title: "Rooftop Activation",
+    slug: "nora-pop-photography",
+    title: "Nora Pop Photography",
     year: "2024",
-    image: "/images/photo-02.jpg",
+    category: "CATALOGUE",
+    image: "/images/brand-01.jpg",
   },
+
 ]
 
 export default function WorkPage() {
@@ -75,30 +82,31 @@ export default function WorkPage() {
 
         {/* Project list — aligned to right */}
         <div className="max-w-2xl relative z-10 w-full ml-auto md:mr-16">
-          <div className="border-t border-foreground/10" />
+          <div className="border-t-2 border-foreground" />
           {PROJECTS.map((project) => (
             <Link href={`/work/${project.slug}`} key={project.id}>
               <motion.div
-                className="group flex flex-col sm:flex-row sm:items-center justify-between py-6 md:py-8 border-b border-foreground/10 cursor-pointer"
+                className="group flex flex-col sm:flex-row sm:items-center justify-between py-1 md:py-1 border-b-2 border-foreground cursor-pointer"
                 onMouseEnter={() => setHoveredProject(project.id)}
                 onMouseLeave={() => setHoveredProject(null)}
               >
                 <div className="flex items-start sm:items-center gap-4 sm:gap-12">
                   <span className="text-xs font-sans text-foreground/40 tracking-widest mt-2 sm:mt-0 transition-colors group-hover:text-foreground">
-                    {project.id}
+                    {project.year}
                   </span>
                   <h2 className="text-sm md:text-base lg:text-lg font-serif font-extrabold tracking-tight transition-transform duration-500 ease-out group-hover:translate-x-4">
                     {project.title}
                   </h2>
                 </div>
                 <div className="mt-4 sm:mt-0 pl-[3.25rem] sm:pl-0 text-xs font-sans tracking-widest text-foreground/40 group-hover:text-foreground transition-colors">
-                  {project.year}
+                  {project.category}
                 </div>
               </motion.div>
             </Link>
           ))}
         </div>
       </PageTransition>
+      <Footer />
     </>
   )
 }

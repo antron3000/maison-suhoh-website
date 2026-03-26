@@ -27,8 +27,9 @@ export default function TopBar() {
     { label: "ABOUT",    href: "/about" },
     { label: t.projects, href: "/work" },
     { label: t.gallery,  href: "/gallery" },
-    { label: "CONTACT",  href: "/contact" },
+    { label: "EVENTS",   href: "/events" },
     { label: "SERVICES", href: "/services" },
+    { label: "CONTACT",  href: "/contact" },
   ]
 
   return (

@@ -19,7 +19,8 @@
 
 
 
-body, * {
+*, *::before, *::after {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: uppercase;
 }
 

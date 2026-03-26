@@ -1,5 +1,6 @@
 "use client"
 
+import Footer from "@/components/footer"
 import Link from "next/link"
 import TopBar from "@/components/top-bar"
 
@@ -7,14 +8,11 @@ const SERVICES = [
   "CREATIVE DIRECTION",
   "ART DIRECTION",
   "PHOTOGRAPHY",
-  "BRANDING",
-  "WEB DESIGN",
-  "PACKAGING DESIGN",
-  "PUBLICATION DESIGN",
-  "CAMPAIGN DESIGN",
+  "WEB DESIGN AND DEVELOPMENT",
+  "CAMPAIGN",
   "CREATIVE PRODUCTION",
   "BRAND STRATEGY",
-  "POSITIONING",
+  "EVENT CURATION",
 ]
 
 const NAV = [
@@ -44,14 +42,14 @@ export default function ServicesPage() {
           {/* Press */}
           <div className="mb-16">
             <p className="text-[20px] tracking-[-0.03em] mb-3">PRESS</p>
-            <p className="text-[20px] tracking-[-0.03em]">VISUAL JOURNAL</p>
-            <p className="text-[20px] tracking-[-0.03em]">[MAISON SUKOH STUDIO] 2023</p>
+            <p className="text-[20px] tracking-[-0.03em]">[MAISON SUKOH] 2023</p>
           </div>
 
 
 
         </div>
       </main>
+      <Footer />
     </>
   )
 }
