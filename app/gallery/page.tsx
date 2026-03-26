@@ -126,109 +126,85 @@ const SCATTERED = [
 type ViewMode = "view1" | "view2" | "view3"
 
 // ── VIEW 1: Horizontal strips per project ──
-// ── Continuous justified fisheye grid ──
-const FISHEYE_SIGMA = 140
-const FISHEYE_PEAK = 1.5
-const ROW_HEIGHT = 180
-const GAP = 3
+// ── Fisheye film strip row ──
+const FISHEYE_SIGMA = 130  // px — spread of the lens
+const FISHEYE_PEAK = 1.45  // max scale at cursor
 
 function gaussianScale(distPx: number): number {
   return 1 + (FISHEYE_PEAK - 1) * Math.exp(-0.5 * (distPx / FISHEYE_SIGMA) ** 2)
 }
 
-type FlatImage = { src: string; w: number; h: number; project: string; projId: string }
-
-function buildJustifiedRows(images: FlatImage[], containerW: number): FlatImage[][] {
-  const rows: FlatImage[][] = []
-  let row: FlatImage[] = []
-  let rowW = 0
-  for (const img of images) {
-    const scaledW = (img.w / img.h) * ROW_HEIGHT
-    if (rowW + scaledW > containerW && row.length > 0) {
-      rows.push(row)
-      row = []
-      rowW = 0
-    }
-    row.push(img)
-    rowW += scaledW + GAP
-  }
-  if (row.length > 0) rows.push(row)
-  return rows
-}
-
-function JustifiedRow({ images }: { images: FlatImage[] }) {
+function FilmStripRow({ project }: { project: typeof PROJECTS[number] }) {
   const [cursorX, setCursorX] = useState<number | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Precompute natural flex centers — stable, no feedback loop
-  const totalAspect = images.reduce((s, img) => s + img.w / img.h, 0)
+  // Precompute natural (unscaled) center X of each image relative to container left
+  // This never changes, so no feedback loop
   const naturalCenters = useMemo(() => {
-    let cum = 0
-    return images.map(img => {
-      const aspect = img.w / img.h
-      const cx = cum + aspect / 2
-      cum += aspect
-      return cx  // in "aspect units" relative to totalAspect
+    const GAP = 4
+    let x = 0
+    return project.images.map(img => {
+      const cx = x + img.w / 2
+      x += img.w + GAP
+      return cx
     })
-  }, [images])
+  }, [project.images])
 
   return (
-    <div
-      ref={containerRef}
-      className="flex gap-[3px] w-full"
-      style={{ height: ROW_HEIGHT }}
-      onMouseMove={e => {
-        const rect = containerRef.current?.getBoundingClientRect()
-        if (rect) setCursorX(e.clientX - rect.left)
-      }}
-      onMouseLeave={() => setCursorX(null)}
-    >
-      {images.map((img, i) => {
-        const baseAspect = img.w / img.h
-        let flex = baseAspect
-        if (cursorX !== null && containerRef.current) {
-          const containerW = containerRef.current.offsetWidth
-          // Convert cursor to aspect-unit space
-          const cursorAspect = (cursorX / containerW) * totalAspect
-          const distAspect = Math.abs(cursorAspect - naturalCenters[i])
-          // Convert to pixels for sigma comparison
-          const distPx = (distAspect / totalAspect) * containerW
-          flex = baseAspect * gaussianScale(distPx)
-        }
+    <div className="relative py-5">
+      <div className="flex items-center">
+        <span className="flex-shrink-0 text-[10px] tracking-[0.18em] text-foreground/30 w-12 pl-8 select-none">
+          {project.id}
+        </span>
+        <div
+          ref={containerRef}
+          className="flex items-center gap-[4px] overflow-x-auto pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          onMouseMove={e => {
+            const rect = containerRef.current?.getBoundingClientRect()
+            if (rect) setCursorX(e.clientX - rect.left + (containerRef.current?.scrollLeft ?? 0))
+          }}
+          onMouseLeave={() => setCursorX(null)}
+        >
+          {project.images.map((img, i) => {
+            let scale = 1
+            let opacity = 1
+            if (cursorX !== null) {
+              const distPx = Math.abs(cursorX - naturalCenters[i])
+              scale = gaussianScale(distPx)
+            }
 
-        return (
-          <motion.div
-            key={i}
-            className="relative overflow-hidden bg-muted cursor-pointer flex-shrink-0"
-            style={{ height: ROW_HEIGHT }}
-            animate={{ flex }}
-            transition={{ type: "spring", stiffness: 200, damping: 32, mass: 0.6 }}
-          >
-            <Image src={img.src} alt={img.project} fill quality={100} className="object-cover" />
-          </motion.div>
-        )
-      })}
+            return (
+              <motion.div
+                key={i}
+                className="flex-shrink-0 relative overflow-hidden bg-muted cursor-pointer"
+                animate={{
+                  width: img.w * scale,
+                  height: img.h * scale,
+                  opacity,
+                }}
+                transition={{ type: "spring", stiffness: 180, damping: 30, mass: 0.7 }}
+              >
+                <Image
+                  src={img.src}
+                  alt={`${project.title} ${i + 1}`}
+                  fill
+                  quality={100}
+                  className="object-cover"
+                />
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
 
 function View1({ filteredProjects }: { filteredProjects: typeof PROJECTS }) {
-  const allImages: FlatImage[] = filteredProjects.flatMap(p =>
-    p.images.map(img => ({ ...img, project: p.title, projId: p.id }))
-  )
-  const [containerW, setContainerW] = useState(1200)
-  const wrapRef = useRef<HTMLDivElement>(null)
-
-  useMemo(() => {
-    if (typeof window !== "undefined") setContainerW(window.innerWidth - 80)
-  }, [])
-
-  const rows = useMemo(() => buildJustifiedRows(allImages, containerW), [allImages, containerW])
-
   return (
-    <div ref={wrapRef} className="pb-32 bg-background min-h-screen px-10 flex flex-col gap-[3px] pt-2">
-      {rows.map((row, i) => (
-        <JustifiedRow key={i} images={row} />
+    <div className="pb-32 bg-background min-h-screen">
+      {filteredProjects.map((project) => (
+        <FilmStripRow key={project.id} project={project} />
       ))}
     </div>
   )
