@@ -11,26 +11,13 @@ import { useLanguage } from "@/lib/LanguageContext"
 import { translations } from "@/lib/i18n"
 
 const MARQUEE_ITEMS = [
-  { src: "/images/grwm-01.jpg",       slug: "grwm",                  title: "#GRWM" },
-  { src: "/images/darkos-02.jpg",     slug: "darkos",                title: "Darkos" },
-  { src: "/images/lumiere-03.jpg",    slug: "revival-in-ghana",      title: "Revival in Ghana" },
-  { src: "/images/ftg-01.jpg",        slug: "for-the-geng-only",              title: "For The Geng Only" },
-  { src: "/images/grwm-04.jpg",       slug: "grwm",                  title: "#GRWM" },
-  { src: "/images/brand-01.jpg",      slug: "nora-pop-photography",  title: "Nora Pop Photography" },
-  { src: "/images/darkos-03.jpg",     slug: "darkos",                title: "Darkos" },
-  { src: "/images/lumiere-08.jpg",    slug: "revival-in-ghana",      title: "Revival in Ghana" },
-  { src: "/images/ftg-03.jpg",        slug: "for-the-geng-only",              title: "For The Geng Only" },
-  { src: "/images/grwm-07.jpg",       slug: "grwm",                  title: "#GRWM" },
-  { src: "/images/brand-03.jpg",      slug: "nora-pop-photography",  title: "Nora Pop Photography" },
-  { src: "/images/darkos-05.jpg",     slug: "darkos",                title: "Darkos" },
-  { src: "/images/lumiere-05.jpg",    slug: "revival-in-ghana",      title: "Revival in Ghana" },
-  { src: "/images/ftg-05.jpg",        slug: "for-the-geng-only",              title: "For The Geng Only" },
-  { src: "/images/grwm-10.jpg",       slug: "grwm",                  title: "#GRWM" },
-  { src: "/images/brand-05.jpg",      slug: "nora-pop-photography",  title: "Nora Pop Photography" },
-  { src: "/images/lumiere-01.jpg",    slug: "revival-in-ghana",      title: "Revival in Ghana" },
-  { src: "/images/darkos-02.jpg",     slug: "darkos",                title: "Darkos" },
-  { src: "/images/ftg-02.jpg",        slug: "for-the-geng-only",              title: "For The Geng Only" },
-  { src: "/images/grwm-05.jpg",       slug: "grwm",                  title: "#GRWM" },
+  { src: "/images/darkos-02.jpg",     slug: "darkos",               title: "Darkos" },
+  { src: "/images/grwm-01.jpg",       slug: "grwm",                 title: "#GRWM" },
+  { src: "/images/ghana-01.jpg",      slug: "ghana-food-movement",  title: "Ghana Food Movement" },
+  { src: "/images/push-03.jpg",       slug: "push-runway-show",     title: "Push Runway Show" },
+  { src: "/images/lumiere-08.jpg",    slug: "revival-in-ghana",     title: "Revival in Ghana" },
+  { src: "/images/ftg-01.jpg",        slug: "for-the-geng-only",    title: "For The Geng Only" },
+  { src: "/images/brand-01.jpg",      slug: "nora-pop-photography", title: "Nora Pop Photography" },
 ]
 const ITEMS = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS]
 
