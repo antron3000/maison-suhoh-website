@@ -12,6 +12,11 @@ const IMAGES = [
   "/images/ftg-03.jpg",
   "/images/ftg-04.jpg",
   "/images/ftg-05.jpg",
+  "/images/ftg-06.jpg",
+  "/images/ftg-07.jpg",
+  "/images/ftg-08.jpg",
+  "/images/ftg-09.jpg",
+  "/images/ftg-10.jpg",
 ]
 
 export default function FTGOnlyPage() {
