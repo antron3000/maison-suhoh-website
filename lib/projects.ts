@@ -115,6 +115,11 @@ export const PROJECTS: Project[] = [
       { src: "/images/ftg-03.jpg", w: 190, h: 115 },
       { src: "/images/ftg-04.jpg", w: 100, h: 115 },
       { src: "/images/ftg-05.jpg", w: 150, h: 115 },
+      { src: "/images/ftg-06.jpg", w: 130, h: 115 },
+      { src: "/images/ftg-07.jpg", w: 100, h: 115 },
+      { src: "/images/ftg-08.jpg", w: 160, h: 115 },
+      { src: "/images/ftg-09.jpg", w: 110, h: 115 },
+      { src: "/images/ftg-10.jpg", w: 140, h: 115 },
     ],
   },
 
