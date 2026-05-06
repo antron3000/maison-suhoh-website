@@ -128,7 +128,7 @@ export const PROJECTS: Project[] = [
     slug: "rock-n-karma-spring-collection",
     title: "Rock N' Karma Spring Collection",
     year: "2026",
-    category: "CAMPAIGN",
+    category: "EDITORIAL",
     image: "/images/rnk-01.jpg",
     images: [
       { src: "/images/rnk-01.jpg",  w: 120, h: 120 },
