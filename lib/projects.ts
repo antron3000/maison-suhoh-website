@@ -124,6 +124,27 @@ export const PROJECTS: Project[] = [
   },
 
   {
+    id: "008",
+    slug: "rock-n-karma-spring-collection",
+    title: "Rock N' Karma Spring Collection",
+    year: "2026",
+    category: "CAMPAIGN",
+    image: "/images/rnk-01.jpg",
+    images: [
+      { src: "/images/rnk-01.jpg",  w: 120, h: 120 },
+      { src: "/images/rnk-02.jpg",  w: 120, h: 120 },
+      { src: "/images/rnk-03.jpg",  w: 100, h: 120 },
+      { src: "/images/rnk-04.jpg",  w: 100, h: 120 },
+      { src: "/images/rnk-05.jpg",  w: 130, h: 120 },
+      { src: "/images/rnk-06.jpg",  w: 130, h: 120 },
+      { src: "/images/rnk-07.jpg",  w: 110, h: 120 },
+      { src: "/images/rnk-08.jpg",  w: 110, h: 120 },
+      { src: "/images/rnk-09.jpg",  w: 100, h: 120 },
+      { src: "/images/rnk-10.jpg",  w: 120, h: 120 },
+    ],
+  },
+
+  {
     id: "005",
     slug: "nora-pop-photography",
     title: "Nora Pop Photography",
