@@ -17,6 +17,55 @@ const IMAGES = [
   "/images/rnk-08.jpg",
   "/images/rnk-09.jpg",
   "/images/rnk-10.jpg",
+  "/images/rnk-11.jpg",
+  "/images/rnk-12.jpg",
+  "/images/rnk-13.jpg",
+  "/images/rnk-14.jpg",
+  "/images/rnk-15.jpg",
+  "/images/rnk-16.jpg",
+  "/images/rnk-17.jpg",
+  "/images/rnk-18.jpg",
+  "/images/rnk-19.jpg",
+  "/images/rnk-20.jpg",
+  "/images/rnk-21.jpg",
+  "/images/rnk-22.jpg",
+  "/images/rnk-23.jpg",
+  "/images/rnk-24.jpg",
+  "/images/rnk-25.jpg",
+  "/images/rnk-26.jpg",
+  "/images/rnk-27.jpg",
+  "/images/rnk-28.jpg",
+  "/images/rnk-29.jpg",
+  "/images/rnk-30.jpg",
+  "/images/rnk-31.jpg",
+  "/images/rnk-32.jpg",
+  "/images/rnk-33.jpg",
+  "/images/rnk-34.jpg",
+  "/images/rnk-35.jpg",
+  "/images/rnk-36.jpg",
+  "/images/rnk-37.jpg",
+  "/images/rnk-38.jpg",
+  "/images/rnk-39.jpg",
+  "/images/rnk-40.jpg",
+  "/images/rnk-41.jpg",
+  "/images/rnk-42.jpg",
+  "/images/rnk-43.jpg",
+  "/images/rnk-44.jpg",
+  "/images/rnk-45.jpg",
+  "/images/rnk-46.jpg",
+  "/images/rnk-47.jpg",
+  "/images/rnk-48.jpg",
+  "/images/rnk-49.jpg",
+  "/images/rnk-50.jpg",
+  "/images/rnk-51.jpg",
+  "/images/rnk-52.jpg",
+  "/images/rnk-53.jpg",
+  "/images/rnk-54.jpg",
+]
+
+const VIDEOS = [
+  { src: "/images/rnk-pink-video.mp4", label: "Pink" },
+  { src: "/images/rnk-geo-print-video.mp4", label: "Geo Print" },
 ]
 
 export default function RockNKarmaPage() {
@@ -32,10 +81,31 @@ export default function RockNKarmaPage() {
             <h1 className="text-2xl tracking-[-0.04em]">ROCK N&apos; KARMA SPRING COLLECTION</h1>
           </div>
           <div className="text-right text-[10px] tracking-[0.1em] text-foreground/50">
-            <p>CREATIVE DIRECTION</p>
+            <p>EDITORIAL</p>
             <p>PHOTOGRAPHY</p>
             <p className="mt-2">2026</p>
           </div>
+        </div>
+
+        {/* Video section */}
+        <div className="max-w-6xl mx-auto mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {VIDEOS.map((v, i) => (
+            <motion.div
+              key={i}
+              className="relative overflow-hidden bg-muted"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <video
+                src={v.src}
+                controls
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          ))}
         </div>
 
         {/* Image grid */}
@@ -46,7 +116,7 @@ export default function RockNKarmaPage() {
               className="relative aspect-[2/3] overflow-hidden bg-muted"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
+              transition={{ duration: 0.5, delay: i * 0.03 }}
             >
               <Image
                 src={src}
